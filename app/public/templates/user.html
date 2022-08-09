@@ -1,0 +1,49 @@
+{% extends "nav.html" %}
+
+{%block head%}
+<title>{{username}}</title>
+{%endblock%}
+
+{% block body %}
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-9 gy-4">
+            <div id="inicio" class="row row-cols-2">
+                <div class="col-3">
+                    <img class="img-thumbnail rounded" src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
+                </div>
+                <div class="col-9">
+                    <h3>{{username}}</h3>
+                    <ul>
+                        <li><p>Carrera: {{carrera}}</p></li>
+                        <li><p>Ciclo: {{ciclo}}</p></li>
+                    </ul>
+                    <p>Preguntas totales: {{preguntas}}</p>
+                    <p>Respuestas totales: {{respuestas}}</p>
+                </div>
+                <div class="col-9 gy-4">
+                    <div class="container">
+                        <div class="row">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item posts">
+                                    <a class="nav-link link-dark active" href="#preguntas" data-bs-toggle="tab">Preguntas</a>
+                                </li>
+                                <li class="nav-item posts">
+                                    <a class="nav-link link-secondary" href="#respuestas" data-bs-toggle="tab">Respuestas</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col" id="posts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
+    </div>
+</div>
+{%endblock%}
+
+{%block scripts%}
+<script src="{{url_for('static', filename='js/posts.js')}}"></script>
+<script src="{{url_for('static', filename='js/user.js')}}"></script>
+{%endblock%}

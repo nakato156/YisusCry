@@ -1,0 +1,57 @@
+{% extends "nav.html" %}
+
+{%block head%}
+<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="{{url_for('static', filename='css/pregunta.css')}}">
+<title>{{titulo}}</title>
+{%endblock%}
+
+{%block body%}
+<div class="container-fluid ml-5 mr-5 p-4">
+    <div class="row justify-content-center">
+        <div class="col-7">
+            <div class="row row-cols-2 mb-3">
+                <div class="col-12 titulo mb-1">
+                    <div class="row"><h3>{{titulo}}</h3></div>
+                </div>
+                <div class="col-2">
+                    <div class="vstack gap-1 votos">
+                        <div class="text-center"><i class="bx bxs-up-arrow" style="cursor:pointer;"></i></div>
+                        <div class="text-center"><p style="margin:auto;">{{votos}}</p></div>
+                        <div class="text-center"><i class="bx bxs-down-arrow" style="cursor:pointer;"></i></div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="row" id="contenido" style="width: 60vw;">{{contenido}}</div>
+                    <div class="row float-end">
+                        <div class="card" style="width: 10rem;">
+                            <div class="card-body">
+                                <h6 class="card-subtitle">{{data_autor.username}}</h6>
+                                <p class="card-text">{{data_autor.carrera}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-1 p-3" id="comentariosZ" style="border-top: 1px solid #ccc;">
+                {%for comentario in comentarios %}
+                <div class="col-6 comentario mb-1" style="border-bottom: 1px solid #ccc;">
+                    <div class="row contenido"><p>{{comentario.comentario}}</p></div>
+                    <div class="row info"><p>{{comentario.username}} - {{comentario.fecha}}</p></div>
+                </div>
+                <div class="w-100"></div>
+                {%endfor%}
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="row">
+                <p bs="{{'user' in session}}" data="{{csrf_token()}}" id="comentario" style="cursor:pointer;">Añadir comentario</p>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+{%block scripts%}
+<script src="{{url_for('static', filename='js/pregunta.js')}}"></script>
+<script src="{{url_for('static', filename='js/parse_code.js')}}"></script>
+{%endblock%}

@@ -1,0 +1,51 @@
+{% extends "nav.html" %}
+
+{% block head %}
+<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+<title>Yisus ayuda</title>
+{%endblock%}
+
+{% block body %}
+<div id="corouselcursos">
+    <div class="carousel-cursos">
+        {%for curso in cursos%}
+        <div class="item-curso">
+            <img src="{{url_for('static', filename='imgs/'+curso+'.png')}}" alt="...">
+        </div>
+        {%endfor%}
+    </div>
+</div>
+
+<section class="profesores">
+    <div class="separador">Yisus m&aacute;s activos</div>
+    <div class="container-fluid d-flex">
+        <div class="mostrar-yisus">
+            <div class="row p-3">
+                {% for user in users %}
+                <div class="col">
+                    <div class="card w-20" style="width: 15rem;">
+                        <img src="{{url_for('static', filename='imgs/perfil/'+user.username+'.png')}}" class="card-img-top" alt="">
+                        <div class="card-body">
+                          <h5 class="card-title">{{user.username}}</h5>
+                          <p class="card-text">{{user.carrera}}</p>
+                          <p class="card-text">{{user.info}}</p>
+                          <a href="../user/{{user.uuid}}" class="card-link">Ver perfil</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{%endblock%}
+
+{%block scripts%}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="{{url_for('static', filename='js/index.js')}}" ></script>
+{%endblock%}

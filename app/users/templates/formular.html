@@ -1,0 +1,77 @@
+{% extends "nav.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/formular.css')}}">
+<title>Formular pregunta</title>
+{%endblock%}
+
+{% block body  %}
+<div class="container-fluid p-4">
+    <div class="row">
+        <div class="col-9">
+            <div class="container">
+                <div class="row">
+                    <h3>Formula tu pregunta</h3>
+                </div>
+                <form class="row g-3" id="formPregunta">
+                    <div class="mb-3">
+                        <label class="form-label">T&iacute;tulo</label>
+                        <input type="text" class="form-control" name="titulo" placeholder="titulo de la pregunta">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Escribe tu pregunta</label>
+                        <textarea class="form-control" name="contenido" rows="3" style="min-height:44vh"></textarea>
+                    </div>
+                    <button class="btn btn-dark">Publicar</button>
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                </form>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row"><h5>Reglas importantes</h5></div>
+            <div class="row row-cols-1">
+                <div class="col">
+                    <ul>
+                        <li><p>Recuerda explicar detalladamente tu problema.</p></li>
+                        <li><p>Recuerda explicar que has intentado para solucionar tu problema.</p></li>
+                        <li><p>Para describir mejor tu problema puedes usar im&aacute;genes.</p></li>
+                        <li><p>Usa las im&aacute;genes solo si es necesario.</p></li>
+                        <li><p>Si tu pregunta incluye c&oacute;digo lee <a href="#">Colocar c&oacute;digo en preguntas</a></p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalPago" tabindex="-1" aria-labelledby="ModalPagoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form class="container" id="form-checkout">
+            <div id="form-checkout__cardNumber"     class="containerPago mt-3"></div>
+            <div id="form-checkout__expirationDate" class="containerPago mt-3"></div>
+            <div id="form-checkout__securityCode"   class="containerPago mt-3"></div>
+            <input class="form-control my-3" type="text" id="form-checkout__cardholderName" />
+            <div class="input-group mb-3">
+                <select class="form-select" id="form-checkout__issuer"></select>
+                <select class="form-select" id="form-checkout__installments"></select>
+            </div>
+            <div class="input-group mb-3">
+                <select class="form-select" id="form-checkout__identificationType"></select>
+                <input type="text" id="form-checkout__identificationNumber" />
+            </div>
+            <input class="form-control mb-3" type="email" id="form-checkout__cardholderEmail" />
+
+            <button type="submit" class="btn btn-dark mb-3" id="form-checkout__submit">Pagar</button>
+            <progress value="0" class="progress-bar">Carregando...</progress>
+        </form>
+    </div>
+  </div>
+</div>
+
+{%endblock%}
+{% block scripts %}
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>const mp = new MercadoPago("{{PUBLIC_KEY}}");</script>
+<script src="{{url_for('static', filename='js/formular.js')}}"></script>
+{%endblock%}

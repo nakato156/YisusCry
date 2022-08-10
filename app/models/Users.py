@@ -11,7 +11,6 @@ class User(BaseModel):
     uuid: str =     attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(37)])
     email: str =    attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(100)])
     username: str = attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(90)])
-    perfil: bytes = attr.field(default=b"")
     codigo: str =   attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(11)])
     password: str = attr.field(default="",  validator=attr.validators.instance_of(str), repr=False)
     carrera: str =  attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(100)])

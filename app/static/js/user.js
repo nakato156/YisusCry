@@ -12,6 +12,10 @@ function init(){
         })
     }
     get_posts("p")
+    document.getElementById("denunciar", ()=>{
+	    const id = window.location.href.split("/").slice(-1)[0]
+	    window.location.href = `../../denuncia?id=${id}`)
+    }
 }
 
 async function get_posts(tipo){
@@ -25,4 +29,8 @@ async function get_posts(tipo){
     const res  = await req.json()
     const data = await res
     print_posts(data["data"], template)
+}
+
+function contratar(){
+	//code contrato
 }

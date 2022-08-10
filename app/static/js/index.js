@@ -8,3 +8,10 @@ function init() {
       autoplaySpeed: 1400,
     });
 }
+
+function loadImages(){
+	const barImgs = document.getElementsByClassName("barimg")
+	for(let i; i <barImgs.length; i++){
+		// img.src = ''
+	}
+}

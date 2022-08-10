@@ -5,6 +5,7 @@ const HOST = window.location.hostname != "localhost" ? window.location.host : ""
 
 function init(){
     template_posts = document.getElementById("posts")
+    element_ant = document.querySelector("button.active")
     initListeners()
     tipo = window.location.hash ? window.location.hash[1] : "p"
     if (["p","r"].includes(tipo)) getPosts(tipo)
@@ -15,13 +16,14 @@ function init(){
         const element = document.querySelectorAll(`[target=${tag}]`)[0]
         element.classList.toggle("bg-dark")
         element.classList.toggle("active")
+	element_ant = element    
         loadView(tag)
     }
 }
 
 function loadView(idView){
-    location.hash = idView
-    if(element_ant.getAttribute("class").split(" ").includes("active")) return
+	location.hash = idView
+    if(element_ant.getAttribute("class").split(" ").includes("active")) return;
     const view = document.getElementById(idView)
     document.getElementById(element_ant.getAttribute("target")).style.display = "none"
     view.style.display = "flex"
@@ -30,12 +32,10 @@ function loadView(idView){
 function initListeners() {
     const triggerTabList = document.querySelectorAll('#myTab button')
     triggerTabList.forEach(triggerEl => {
-      element_ant = element_ant ? element_ant : triggerEl
       triggerEl.addEventListener('click', e => {
         e.preventDefault()
-        e.stopPropagation()
         let element = e.target
-
+	console.log(element, element_ant)
         element_ant.classList.toggle("bg-dark")
         if(element.tagName != "BUTTON") element = element.parentNode
         loadView(element.getAttribute("target"))

@@ -61,10 +61,6 @@ def update_user(data):
 
     data_user = User(**user_)
 
-    if request.files.get("perfil"):
-        img = request.files.get("perfil").stream
-        data_user.perfil = img
-
     users_controller.actualizar(data_user)
 
     user_.update(data)

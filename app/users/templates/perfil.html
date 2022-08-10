@@ -49,6 +49,8 @@
             <div id="editar" class="row row-cols-2" style="display:none">
                 <div id="change-img" class="col-3">
                     <img id="img_preview" class="img-thumbnail rounded" src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
+                    <label id="imgEdit" for="fileperfil"></label>
+                    <input type="file" style="display:none" name="perfil" id="fileperfil" accept="image/">
                 </div>
                 <div class="col-9">
                     <form id="formEdit">

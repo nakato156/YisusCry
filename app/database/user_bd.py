@@ -16,7 +16,10 @@ def eliminar(user: User) -> bool:
         return False
 
 def actualizar(user: User) -> User:
-    Sentence(user).update(user.get_object(ignore=("password", "email", "fecha", "codigo"))).execute()
+    sentence = Sentence(user).update(user.get_object(ignore=('uuid', "password", "email", "fecha", "codigo"))).where(('uuid', user.uuid))
+    with open("file.txt", "w") as f:
+        f.write(str(sentence))
+    sentence.execute()
     return user
 
 def auth(user: User) -> User:

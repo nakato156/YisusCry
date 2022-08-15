@@ -24,6 +24,7 @@ def registro():
 @delete_csrf
 @save_logger
 def post_registro(data):
+    data["edad"] = int(data["edad"])
     new_user = User(**data)
     print(new_user)
     if users_controller.crear(new_user):

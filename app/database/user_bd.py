@@ -3,7 +3,7 @@ from .Model import Sentence
 from os import getenv
 
 def crear(user: User) -> User:
-    Sentence(user).save(user.get_object())
+    Sentence(user).save()
     return user
     
 def eliminar(user: User) -> bool:
@@ -32,7 +32,7 @@ def auth(user: User) -> User:
     return User(*data)
 
 def get_one(user: User) -> User:
-    data = Sentence(user).select().where(("uuid", user.uuid)).execute()
+    data = Sentence(user).select().where(("uuid", user.uuid)).where(("username", user.username), "OR").execute()
     return User(*data)
 
 def get_all() -> list[User]:

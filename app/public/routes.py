@@ -25,9 +25,10 @@ def registro():
 @save_logger
 def post_registro(data):
     data["edad"] = int(data["edad"])
+    data["ciclo"] = int(data["ciclo"])
     new_user = User(**data)
-    print(new_user)
-    if users_controller.crear(new_user):
+    new_user = users_controller.crear(new_user)
+    if new_user:
         data_user = users_controller.get_one(new_user)
         session["user"] = data_user.get_object(ignore=("password",))
         res = {"status": True}

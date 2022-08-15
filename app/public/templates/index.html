@@ -1,7 +1,6 @@
 {% extends "nav.html" %}
 
 {% block head %}
-<link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
@@ -12,8 +11,8 @@
 <div id="corouselcursos">
     <div class="carousel-cursos">
         {%for curso in cursos%}
-        <div class="item-curso">
-            <img src="{{url_for('static', filename='imgs/'+curso+'.png')}}" alt="...">
+        <div class="item-curso barimg">
+            <img target="{{url_for('static', filename='imgs/'+curso+'.png')}}" alt="...">
         </div>
         {%endfor%}
     </div>
@@ -27,7 +26,7 @@
                 {% for user in users %}
                 <div class="col">
                     <div class="card w-20" style="width: 15rem;">
-                        <img src="{{url_for('static', filename='imgs/perfil/'+user.username+'.png')}}" class="card-img-top" alt="">
+			<img src="{{url_for('static', filename='imgs/perfil/'+user.username+'.png')}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
                         <div class="card-body">
                           <h5 class="card-title">{{user.username}}</h5>
                           <p class="card-text">{{user.carrera}}</p>

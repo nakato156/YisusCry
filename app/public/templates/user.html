@@ -13,7 +13,7 @@
                     <img class="img-thumbnail rounded" src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
                 </div>
                 <div class="col-9">
-                    <h3>{{username}}</h3>
+		    <h3>{{username}}{%if role == 1%}&nbsp;<p style="color:red;">&diams;</p>{%endif%}</h3>
                     <ul>
                         <li><p>Carrera: {{carrera}}</p></li>
                         <li><p>Ciclo: {{ciclo}}</p></li>
@@ -21,10 +21,12 @@
                     <p>Preguntas totales: {{preguntas}}</p>
                     <p>Respuestas totales: {{respuestas}}</p>
 		    <div class="row">
-			    <div class="col">
-				    <button id="contratar" class="btn btn-success">Contratar</button>
-				    <button id="denunciar" class="btn btn-danger">Denunciar</button>
-			    </div>
+			<div class="col">
+			    {%if role == 2%}
+			    <button id="contratar" bs="{{'user' in session}}" class="btn btn-success">Contratar</button>
+			    {%endif%}
+			    <button id="denunciar" class="btn btn-danger">Denunciar</button>
+			</div>
 		    </div>
                 </div>
                 <div class="col-9 gy-4">
@@ -47,9 +49,37 @@
         <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
     </div>
 </div>
+
+<div class="modal fade" id="ModalPago" tabindex="-1" aria-labelledby="ModalPagoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <form class="container" id="form-checkout">
+            <div id="form-checkout__cardNumber"     class="containerPago mt-3"></div>
+            <div id="form-checkout__expirationDate" class="containerPago mt-3"></div>
+            <div id="form-checkout__securityCode"   class="containerPago mt-3"></div>
+            <input class="form-control my-3" type="text" id="form-checkout__cardholderName" />
+            <div class="input-group mb-3">
+                <select class="form-select" id="form-checkout__issuer"></select>
+                <select class="form-select" id="form-checkout__installments"></select>
+            </div>
+            <div class="input-group mb-3">
+                <select class="form-select" id="form-checkout__identificationType"></select>
+                <input type="text" id="form-checkout__identificationNumber" />
+            </div>
+            <input class="form-control mb-3" type="email" id="form-checkout__cardholderEmail" />
+
+            <button type="submit" class="btn btn-dark mb-3" id="form-checkout__submit">Pagar</button>
+            <progress value="0" class="progress-bar">Cargando...</progress>
+        </form>
+    </div>
+    <input type="hidden" id="datacsrxf" value="{{csrf_token()}}">
+  </div>
+</div>
 {%endblock%}
 
 {%block scripts%}
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>const mp = new MercadoPago("{{PUBLIC_KEY}}");</script>
 <script src="{{url_for('static', filename='js/posts.js')}}"></script>
 <script src="{{url_for('static', filename='js/user.js')}}"></script>
 {%endblock%}

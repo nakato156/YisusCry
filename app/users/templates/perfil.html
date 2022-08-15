@@ -13,8 +13,9 @@
                 <div id="myTab" class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical">
                     <button class="nav-link active bg-dark" target="inicio" data-bs-toggle="pill" type="button" role="tab" aria-selected="true">Inicio <i class='bx bxs-home'></i></button>
                     <button class="nav-link" target="editar" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Editar Perfil <i class='bx bxs-edit-alt'></i></button>
-                    <button class="nav-link" target="chat" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Salas de chat <i class='bx bxs-chat' ></i></button>
+                    <button class="nav-link" target="transacciones" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Transacciones <i class='bx bx-money' ></i></button>
                     <button class="nav-link" target="config" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Configuraci&oacute;n <i class='bx bx-cog'></i></button>
+		    <a class="btn btn-danger" type="button" href="../../salir">Salir</a>
                 </div>
             </div>
         </div>
@@ -81,6 +82,35 @@
                     </form>
                 </div>
             </div>
+	    <div id="config" class="row row-cols-2" style="display: none;">
+		<div class="col-8">
+		    <div class="row mb-1">
+			<button class="btn btn-danger delete" target="cuenta">Eliminar cuenta</button>
+		    </div>
+		    {%if session["user"]["role"] == 0%}
+		    <div class="row mb-1">
+			<button class="btn btn-success">Ser Yisus</button>
+		    </div>
+		    {%else%}
+		    <div class="row mb-1">
+			<button class="btn btn-danger delete" target="yisus">Dejar de ser Yisus</button>
+		    </div>
+		    {%endif%}
+		</div>
+	    </div>
+	    <div id="transacciones" class="row row-cols-2" style="display: none;" fetch="true">
+		<div class="col-4">
+		</div>
+		<input type="hidden" id="token" value="{{csrf_token()}}">
+		<div class="col-9 p-3">
+		    {% if session["user"]["role"] == 2%}
+		    <label>Contratos</label>
+		    <div id="contratos"></div>
+		    {%endif%}
+		    <label>Usuarios contratados</label>
+		    <div id="tables"></div>
+		</div>
+	    </div>
         </div>
     </div>
 </div>

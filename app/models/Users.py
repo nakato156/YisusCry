@@ -18,6 +18,7 @@ class User(BaseModel):
     ciclo: int =    attr.field(default=0,   validator=[attr.validators.instance_of(int),  lambda _, _attr,val: valid(val in range(11))])
     info:str   =    attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(200)], converter=lambda x: str(x) if x else "")
     fecha: str =    attr.field(default="")
+    role:int =      attr.field(default=0)
 
     def __attrs_post_init__(self):
         setattr(self, "__table", getenv("BD_TABLE_USERS"))

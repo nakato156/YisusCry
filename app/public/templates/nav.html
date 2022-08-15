@@ -15,6 +15,15 @@
                 <button class="btn btn-outline-success" type="submit">Buscar</button>
             </form>
         </div>
+	{%if 'user' in session%}
+	<ul class="navbar-nav mb-lg-0">
+	    <li class="nav-item">
+		<a class="nav-link active" href="../../perfil">Perfil</a>
+	    </li>
+	</ul>
+	{%else%}
+	    <a class="btn btn-light mx-1" type="button" href="../../login">Iniciar sesion</button>
+	{%endif%}
         <a class="btn btn-outline-light" type="button" href="../preguntar">Preguntar</a>
     </div>
 </nav>

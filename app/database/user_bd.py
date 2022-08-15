@@ -15,10 +15,15 @@ def eliminar(user: User) -> bool:
         print(e)
         return False
 
+def eliminar_yisus(user: User) -> bool:
+    try:
+        Sentence(user).delete().where(('uuid', user.uuid)).execute()
+        Sentence(user).update({"user_id": "1"}).where(('user_id', user.uuid)).execute()
+        return True
+    except: return False
+
 def actualizar(user: User) -> User:
     sentence = Sentence(user).update(user.get_object(ignore=('uuid', "password", "email", "fecha", "codigo"))).where(('uuid', user.uuid))
-    with open("file.txt", "w") as f:
-        f.write(str(sentence))
     sentence.execute()
     return user
 
@@ -31,7 +36,7 @@ def get_one(user: User) -> User:
     return User(*data)
 
 def get_all() -> list[User]:
-    return [User(*user) for user in Sentence(User()).select().execute(select_one=False)]
+    return [User(*user) for user in Sentence(User()).select().where(('uuid', "!=", "1")).execute(select_one=False)]
 
 def get_data(user: User) -> User:
     data = Sentence(user).select().where(('uuid', user.uuid)).execute()
@@ -45,3 +50,22 @@ def count_posts(user: User) -> dict:
         "preguntas": preguntas[0],
         "respuestas": respuestas[0]
     }
+
+def get_data_yisus(user: User) -> dict:
+    table = getenv("BD_TABLE_CONFIG_ACCOUNT_Y")
+    data = Sentence(user).free("SELECT * FROM "+table+" WHERE user_id = {}", (user.uuid, ), results=True)
+    if data:
+        return dict(zip(("uuid", "costo", "nro_cuenta"), data[0]))
+    return {}
+
+def get_transacciones(user: User) -> dict:
+    table = getenv("BD_TABLE_CUENTAS_USERS")
+    table_users = user.__table
+    
+    select = f"SELECT {table}.monto, {table}.fecha, {table}.id, {table_users}.username FROM {table} INNER JOIN {table_users} ON {table_users}.uuid = {table}.user_id"
+    
+    compras = Sentence(user).free(select + " WHERE client_id = {} ORDER BY fecha", (user.uuid,), results=True)
+    ganancias = Sentence(user).free(select + " WHERE user_id = {} ORDER BY fecha", (user.uuid,), results=True)
+    print(ganancias)
+
+    return {"detalles": {"compras": compras, "contratos": ganancias}, "monto": sum(info[0] for info in ganancias)}

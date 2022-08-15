@@ -4,6 +4,7 @@ from app.controllers import users_controller, post_controller, comment_controlle
 from app.models.Comments import Comment
 from app.models.Users import User
 from app.models.Posts import Post
+from os import getenv
 
 public_routes = Blueprint("public_routes", __name__, template_folder="./templates")
 
@@ -46,11 +47,12 @@ def login():
 @save_logger
 def login_user(data):
     data_user = User(**data)
-    data = users_controller.auth(data_user)
-    if data:
-        session["user"] = users_controller.get_one(data).get_object(ignore=('password', ))
-        return {"status": True}
-    return {"status": False}
+    try:
+        data = users_controller.auth(data_user)
+        if data:
+            session["user"] = users_controller.get_one(data).get_object(ignore=('password', ))
+            return {"status": True}
+    except: return {"status": False}
 
 @public_routes.get("/preguntas")
 def preguntas():
@@ -79,5 +81,9 @@ def get_posts(user_id: str):
 def get_user(id: str):
     user = User(uuid = id)
     posts = users_controller.count_posts(user)
-    return render_template("user.html", **users_controller.get_one(user).get_object(ignore=('password', 'fecha')), **posts)
-
+    return render_template("user.html", **users_controller.get_one(user).get_object(ignore=('password', 'fecha')), **posts, PUBLIC_KEY=getenv("PUBLIC_KEY"))
+@public_routes.get("/denuncia")
+def denuncia():
+    id = request.args.get("id")
+    if not id: return "<h1>No se ha seleccionado algún usuario</h1><br><a href='../'>regresar</a>"
+    return render_template("denuncia.html", id=id)

@@ -20,10 +20,11 @@
                 <label for="floatingPassword">Password</label>
             </div>
             <div class="col-md-9 justify-content-center">
+		<a class="link-primary" href="/registro">Registrarse</a><br>
                 <button type="submit" class="btn btn-primary">Iniciar sesi&oacute;n</button>
             </div>
             <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-        </form>
+	</form>
     </section>
 {%endblock%}
 {% block scripts%}

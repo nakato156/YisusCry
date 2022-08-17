@@ -1,5 +1,6 @@
 from ..models.Users import User
 from .Model import Sentence
+from ..errors import UserNotFound
 from os import getenv
 
 def crear(user: User) -> User:
@@ -7,7 +8,6 @@ def crear(user: User) -> User:
     return user
     
 def eliminar(user: User) -> bool:
-    user_id = user.uuid
     try:
         Sentence(user).delete().where(('uuid', user.uuid)).execute()
         return True
@@ -30,6 +30,16 @@ def actualizar(user: User) -> User:
 def auth(user: User) -> User:
     data = Sentence(user).select().where(("username", user.username)).where(("password", user.password)).execute()
     return User(*data)
+
+def get(user: User) -> User:
+    data = Sentence(user).select()
+    campos = user.get_object(("role", "edad", "ciclo", "carrera", "info"))
+    for k,v in campos.items():
+        if v: data.where((k, v))
+    res = data.execute()
+    if not res: raise UserNotFound
+    return User(*res)
+
 
 def get_one(user: User) -> User:
     data = Sentence(user).select().where(("uuid", user.uuid)).where(("username", user.username), "OR").execute()
@@ -60,12 +70,14 @@ def get_data_yisus(user: User) -> dict:
 
 def get_transacciones(user: User) -> dict:
     table = getenv("BD_TABLE_CUENTAS_USERS")
-    table_users = user.__table
+    table_users = getattr(user, "__table")
     
-    select = f"SELECT {table}.monto, {table}.fecha, {table}.id, {table_users}.username FROM {table} INNER JOIN {table_users} ON {table_users}.uuid = {table}.user_id"
+    select = f"SELECT {table}.monto, {table}.fecha, {table}.id, {table_users}.username FROM {table} INNER JOIN {table_users}"
     
-    compras = Sentence(user).free(select + " WHERE client_id = {} ORDER BY fecha", (user.uuid,), results=True)
-    ganancias = Sentence(user).free(select + " WHERE user_id = {} ORDER BY fecha", (user.uuid,), results=True)
+    on = f" ON {table_users}.uuid = {table}.user_id"
+    compras = Sentence(user).free(select + on +" WHERE client_id = {} ORDER BY fecha", (user.uuid,), results=True)
+    on = f" ON {table_users}.uuid = {table}.client_id"
+    ganancias = Sentence(user).free(select + on +" WHERE user_id = {} ORDER BY fecha", (user.uuid,), results=True)
     print(ganancias)
 
     return {"detalles": {"compras": compras, "contratos": ganancias}, "monto": sum(info[0] for info in ganancias)}

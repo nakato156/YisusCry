@@ -7,39 +7,47 @@
 
 {% block body %}
 <div class="container-fluid">
-    <div class="row row-cols-2">
-        <div class="col-3 gy-4">
-            <div class="col">
-                <div id="myTab" class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical">
-                    <button class="nav-link active bg-dark" target="inicio" data-bs-toggle="pill" type="button" role="tab" aria-selected="true">Inicio <i class='bx bxs-home'></i></button>
-                    <button class="nav-link" target="editar" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Editar Perfil <i class='bx bxs-edit-alt'></i></button>
-                    <button class="nav-link" target="transacciones" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Transacciones <i class='bx bx-money' ></i></button>
-                    <button class="nav-link" target="config" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Configuraci&oacute;n <i class='bx bx-cog'></i></button>
-		    <a class="btn btn-danger" type="button" href="../../salir">Salir</a>
-                </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3 gy-4">
+            <div id="myTab" class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active bg-dark" target="inicio" data-bs-toggle="pill" type="button" role="tab" aria-selected="true">Inicio <i class='bx bxs-home'></i></button>
+                <button class="nav-link" target="editar" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Editar Perfil <i class='bx bxs-edit-alt'></i></button>
+                <button class="nav-link" target="transacciones" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Transacciones <i class='bx bx-money'></i></button>
+                <button class="nav-link" target="config" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Configuraci&oacute;n <i class='bx bx-cog'></i></button>
+                {%if roles.has('admin')%}
+                <button class="nav-link" target="template_admin" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Administraci&oacute;n <i class='bx bx-user'></i></button>
+                {%endif%}
+                <a class="btn btn-danger" type="button" href="../../salir">Salir</a>
             </div>
         </div>
-        <div class="col-9 gy-4">
+        <div class="col-sm-12 col-md-9 col-lg-9 gy-4">
             <div id="inicio" class="row row-cols-2">
-                <div class="col-3">
-                    <img class="img-thumbnail rounded" src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
+                <div class="col-sm-6 col-md-6 col-lg-3">
+                    <img class="img-thumbnail rounded"
+                        src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
                 </div>
-                <div class="col-9">
+                <div class="col-sm-6 col-md-6 col-lg-9">
                     <h3>{{username}}</h3>
                     <ul>
-                        <li><p>Carrera: {{carrera}}</p></li>
-                        <li><p>Ciclo: {{ciclo}}</p></li>
+                        <li>
+                            <p>Carrera: {{carrera}}</p>
+                        </li>
+                        <li>
+                            <p>Ciclo: {{ciclo}}</p>
+                        </li>
                     </ul>
                 </div>
-                <div class="col-9 gy-4">
+                <div class="col-sm-12 col-md-12 col-lg-9 gy-4">
                     <div class="container">
                         <div class="row">
                             <ul class="nav nav-tabs">
                                 <li class="nav-item posts">
-                                    <a class="nav-link link-dark active" href="#preguntas" data-bs-toggle="tab">Preguntas</a>
+                                    <a class="nav-link link-dark active" href="#preguntas"
+                                        data-bs-toggle="tab">Preguntas</a>
                                 </li>
                                 <li class="nav-item posts">
-                                    <a class="nav-link link-secondary" href="#respuestas" data-bs-toggle="tab">Respuestas</a>
+                                    <a class="nav-link link-secondary" href="#respuestas"
+                                        data-bs-toggle="tab">Respuestas</a>
                                 </li>
                             </ul>
                         </div>
@@ -49,7 +57,8 @@
             </div>
             <div id="editar" class="row row-cols-2" style="display:none">
                 <div id="change-img" class="col-3">
-                    <img id="img_preview" class="img-thumbnail rounded" src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
+                    <img id="img_preview" class="img-thumbnail rounded"
+                        src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
                     <label id="imgEdit" for="fileperfil"></label>
                     <input type="file" style="display:none" name="perfil" id="fileperfil" accept="image/">
                 </div>
@@ -82,41 +91,105 @@
                     </form>
                 </div>
             </div>
-	    <div id="config" class="row row-cols-2" style="display: none;">
-		<div class="col-8">
-		    <div class="row mb-1">
-			<button class="btn btn-danger delete" target="cuenta">Eliminar cuenta</button>
-		    </div>
-		    {%if session["user"]["role"] == 0%}
-		    <div class="row mb-1">
-			<button class="btn btn-success">Ser Yisus</button>
-		    </div>
-		    {%else%}
-		    <div class="row mb-1">
-			<button class="btn btn-danger delete" target="yisus">Dejar de ser Yisus</button>
-		    </div>
-		    {%endif%}
-		</div>
-	    </div>
-	    <div id="transacciones" class="row row-cols-2" style="display: none;" fetch="true">
-		<div class="col-4">
-		</div>
-		<input type="hidden" id="token" value="{{csrf_token()}}">
-		<div class="col-9 p-3">
-		    {% if session["user"]["role"] == 2%}
-		    <label>Contratos</label>
-		    <div id="contratos"></div>
-		    {%endif%}
-		    <label>Usuarios contratados</label>
-		    <div id="tables"></div>
-		</div>
-	    </div>
+            <div id="config" class="row row-cols-2 justify-content-center" style="display: none;">
+                <div class="col-8">
+                    <div class="row mb-1">
+                        <button class="btn btn-danger delete" target="cuenta">Eliminar cuenta</button>
+                    </div>
+                    {%if not roles.has('yisus')%}
+                    <div class="row mb-1">
+                        <button class="btn btn-success">Ser Yisus</button>
+                    </div>
+                    {%else%}
+                    <div class="row mb-1">
+                        <button class="btn btn-danger delete" target="yisus">Dejar de ser Yisus</button>
+                    </div>
+                    {%endif%}
+                </div>
+            </div>
+            <div id="transacciones" class="row row-cols-2" style="display: none;" fetch="true">
+                <div class="col-4"></div>
+                <input type="hidden" id="token" value="{{csrf_token()}}">
+                <div class="col-9 p-3">
+                    {% if roles.has('yisus')%}
+                    <label>Contratos</label>
+                    <div id="contratos"></div>
+                    {%endif%}
+                    <label>Usuarios contratados</label>
+                    <div id="tables"></div>
+                </div>
+            </div>
+            {%if roles.has('admin')%}
+            <div id="template_admin" class="row justify-content-center" style="display: none;">
+                <div class="col-sm-12 col-md-12 col-lg-9 p-3">
+                    <form class="row g-3" id="form_admin">
+                        <div class="col-sm-6 col-md-8">
+                            <input class="form-control" type="text" name="query" id="user_search">
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <select class="form-select" name="criterio" id="criterio">
+                                <option value="username">username</option>
+                                <option value="codigo">c&oacute;digo</option>
+                                <option value="uuid">uuid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-success">Consultar</button>
+                        </div>
+                    </form>
+                    <form id="form_update_user">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-5 col-lg-5">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" name="username">
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <label class="form-label">C&oacute;digo</label>
+                                <input type="text" class="form-control" name="codigo" readonly>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <label class="form-label">Carrera</label>
+                                <input type="text" class="form-control" name="carrera" readonly>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <label class="form-label">Correo electr&oacute;nico</label>
+                                <input type="text" class="form-control" name="email" readonly>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <label class="form-label">uuid</label>
+                                <input type="text" class="form-control" name="uuid" readonly>
+                            </div>
+                        </div>
+                        <div class="row row-cols-2">
+                            <div class="col-sm-6 col-md-3 col-lg-3 mb-3">
+                                <label class="form-label">Roles</label>
+                                <ul class="list-group" id="listRoles">
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-3 col-lg-3 mb-3" style="border-left: 1px solid #ccc;">
+                                <label class="form-label">M&aacute;s Roles</label>
+                                <ul class="list-group" id="masRoles">
+                                </ul>
+                            </div>
+                        </div>
+
+                          <button class="btn btn-success" id="updateUser">Guardar Cambios</button>
+                    </form>
+                    <div class="row mt-2">
+                        <button class="btn btn-danger" id="deleteUser" disabled>Eliminar usuario</button>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
         </div>
     </div>
 </div>
 {%endblock%}
 {%block scripts%}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{%if roles.has('admin')%}
+<script src="{{url_for('static', filename='js/admin.js')}}"></script>
+{%endif%}
 <script src="{{url_for('static', filename='js/posts.js')}}"></script>
 <script src="{{url_for('static', filename='js/check_forms.js')}}"></script>
 <script src="{{url_for('static', filename='js/perfil.js')}}"></script>

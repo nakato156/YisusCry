@@ -21,6 +21,9 @@ def auth(user: User) -> User:
     user.password = sha256(user.password.encode()).hexdigest()
     return user_bd.auth(user)
 
+def get(user: User) -> User:
+    return user_bd.get(user)
+
 def get_one(user: User) -> User:
     return user_bd.get_one(user)
 

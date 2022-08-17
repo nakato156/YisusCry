@@ -59,7 +59,7 @@ class Sentence(BD):
 
     def update(self, data: dict):
         self.sentence = "UPDATE"
-        self._set = [f"`{campo}` = {self.parse_val(str(val))}" for campo,val in data.items()]
+        self._set = [f"`{campo}` = {self.parse_val(str(val))}" for campo, val in data.items() if val]
         return self
 
     def delete(self):

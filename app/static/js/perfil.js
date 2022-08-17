@@ -13,13 +13,13 @@ function init(){
     if ("pri".includes(tipo)) getPosts(tipo == "i" ? "p" : tipo)
     else {
         const tag = location.hash.slice(1)
-	element_ant.classList.toggle("bg-dark")
-	element_ant.classList.toggle("active")
+	    element_ant.classList.toggle("bg-dark")
+    	element_ant.classList.toggle("active")
         const element = document.querySelector(`[target=${tag}]`)
         element.classList.toggle("bg-dark")
         element.classList.toggle("active")   
         loadView(tag)
-	element_ant = element
+	    element_ant = element
     }
 }
 
@@ -30,9 +30,9 @@ function loadView(idView){
     document.getElementById(element_ant.getAttribute("target")).style.display = "none"
     view.style.display = "flex"
     if(view.getAttribute("fetch") == "true") {
-	try{
-	    window[view.getAttribute("id")](view)
-	}catch (error) {}
+        try{
+            window[view.getAttribute("id")](view)
+        }catch (error) {}
     }
 }
 
@@ -118,28 +118,27 @@ async function getPosts(tipo){
 
 async function transacciones(view){
     const req = await fetch(`${HOST}/get-transactions`, {
-	method: "POST",
-	headers: {
-	    "X-CSRFToken": document.getElementById("token").value
-	}
+        method: "POST",
+        headers: {
+            "X-CSRFToken": document.getElementById("token").value
+        }
     })
 
     const res = await req.json()
     const data = await res
     
     let temp = ""
-    if(data.total){
-	temp += `<div class="col-3 monto">${data.monto}</div>`
-    }
+    if(data.total) temp += `<div class="col-3 monto">${data.monto}</div>`
 
     let compras = data.detalles.compras
-    if(data.detalles.contratos){
-	let name_cols = ["Monto recibido", "fecha", "Id de venta", "Usuario cliente"]
-	document.getElementById("contratos").innerHTML = createTable(name_cols, data.detalles.contratos)
+    if(data.detalles.contratos.length){
+	    let name_cols = ["Monto recibido", "fecha", "Id de venta", "Usuario cliente"]
+	    const tableContratos = document.getElementById("contratos")
+        if(tableContratos) tableContratos.innerHTML = createTable(name_cols, data.detalles.contratos)
     }
-    if(compras) {
-	let name_cols = ["Monto pagado", "fecha", "Id de compra", "Usuario contratado"]
-	document.getElementById("tables").innerHTML = createTable(name_cols, compras)
+    if(compras.length) {
+	    let name_cols = ["Monto pagado", "fecha", "Id de compra", "Usuario contratado"]
+	    document.getElementById("tables").innerHTML = createTable(name_cols, compras)
     }
 }
 

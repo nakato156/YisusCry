@@ -13,7 +13,7 @@
                     <img class="img-thumbnail rounded" src="{{url_for('static', filename='imgs/perfil/'+username+'.png')}}" alt="">
                 </div>
                 <div class="col-9">
-		    <h3>{{username}}{%if role == 1%}&nbsp;<p style="color:red;">&diams;</p>{%endif%}</h3>
+		    <h3>{{username}}{%if role.has('admin')%}&nbsp;<p style="color:red;">&diams;</p>{%endif%}</h3>
                     <ul>
                         <li><p>Carrera: {{carrera}}</p></li>
                         <li><p>Ciclo: {{ciclo}}</p></li>
@@ -22,7 +22,7 @@
                     <p>Respuestas totales: {{respuestas}}</p>
 		    <div class="row">
 			<div class="col">
-			    {%if role == 2%}
+			    {%if role.has('yisus')%}
 			    <button id="contratar" bs="{{'user' in session}}" class="btn btn-success">Contratar</button>
 			    {%endif%}
 			    <button id="denunciar" class="btn btn-danger">Denunciar</button>

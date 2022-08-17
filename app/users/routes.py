@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, session, request, abort, redirect
 from app.functions.decorators import delete_csrf, valid_data_user, login_required
 from app.controllers import post_controller, users_controller, comment_controller, contratos_controller
+from app.functions.RoleManager import Role
 from app.models.Contratos import Contrato
 from app.models.Comments import Comment
 from app.models.Posts import Post
 from app.models.Users import User
+from jinja2 import Template
 from uuid import uuid4
 from os import getenv
 import mercadopago
@@ -14,7 +16,8 @@ user_routes = Blueprint('user_routes', __name__, template_folder="./templates/")
 @user_routes.get("/perfil")
 @login_required
 def perfil():
-    return render_template("perfil.html", **session["user"])
+    roles = Role(session["user"]["role"])
+    return render_template("perfil.html", **session["user"], roles=roles)
 
 @user_routes.get("/salir")
 @login_required
@@ -48,12 +51,16 @@ def crear_post(data):
     data_payment: dict = data.get("data_payment")
     data_payment.update(nuevo_post.data_pago())
 
-    preference_response = sdk.payment().create(data_payment)
-    preference = preference_response["response"]
+    is_admin = Role(session["user"]["role"]).has("admin")
 
-    if preference["status"].lower() == "approved":
+    if not is_admin:
+        preference_response = sdk.payment().create(data_payment)
+        preference = preference_response["response"]
+
+    if preference["status"].lower() == "approved" or is_admin:
         res = post_controller.crear(nuevo_post)
-        return {"status": True, "id": id_post}
+        return {"status": res, "id": id_post}
+        
     return {"status": False}
 
 @user_routes.post("/contratar")
@@ -125,6 +132,5 @@ def delete():
     if data == "yisus":
         pass #eliminar config de user
     elif data == "cuenta":
-        user_controller.eliminar(User(**session["user"]))
-        pass
+        users_controller.eliminar(User(**session["user"]))
     return {"status": "test"}

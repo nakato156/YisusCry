@@ -54,7 +54,9 @@ def login_user(data):
         if data:
             session["user"] = users_controller.get_one(data).get_object(ignore=('password', ))
             return {"status": True}
-    except: return {"status": False}
+    except Exception as e: 
+        print(e)
+        return {"status": False}
 
 @public_routes.get("/preguntas")
 def preguntas():
@@ -83,7 +85,7 @@ def get_posts(user_id: str):
 def get_user(id: str):
     user = User(uuid = id)
     posts = users_controller.count_posts(user)
-    return render_template("user.html", **users_controller.get_one(user).get_object(ignore=('password', 'fecha')), **posts, PUBLIC_KEY=getenv("PUBLIC_KEY"))
+    return render_template("user.html", **users_controller.get_one(user).get_object(ignore=('password', 'fecha'), convert=True), **posts, PUBLIC_KEY=getenv("PUBLIC_KEY"))
 @public_routes.get("/denuncia")
 def denuncia():
     id = request.args.get("id")

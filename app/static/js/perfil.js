@@ -3,7 +3,6 @@ let element_ant,  postTab_ant = null;
 let inputImg, img_preview = null
 let template_posts = null
 let TOKEN = null
-const HOST = window.location.hostname != "localhost" ? window.location.host : ""
 
 function init(){
     template_posts = document.getElementById("posts")
@@ -65,7 +64,7 @@ function initListeners() {
         const btnEdit = document.getElementById("editBtn")
         btnEdit.disabled = true
         
-        const req = await fetch(`${HOST}/user-update`, {
+        const req = await fetch(`/user-update`, {
             method: "POST",
             body: data
         })
@@ -128,7 +127,7 @@ function previewImg(e){
 
 async function getPosts(tipo){
     loadder(template_posts)
-    const req = await fetch(`${HOST}/my-posts?tipo=${tipo}`)
+    const req = await fetch(`/my-posts?tipo=${tipo}`)
     const res = await req.json()
     const data = await res
     if(data.data){
@@ -138,7 +137,7 @@ async function getPosts(tipo){
 }
 
 async function transacciones(view){
-    const req = await fetch(`${HOST}/get-transactions`, {
+    const req = await fetch('/get-transactions', {
         method: "POST",
         headers: {
             "X-CSRFToken": document.getElementById("token").value

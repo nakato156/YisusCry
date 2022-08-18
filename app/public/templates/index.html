@@ -26,7 +26,7 @@
                 {% for user in users %}
                 <div class="col">
                     <div class="card w-20" style="width: 15rem;">
-			<img src="{{url_for('static', filename='imgs/perfil/'+user.username+'.png')}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
+			<img src="{{get_img(user.username)}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
                         <div class="card-body">
                           <h5 class="card-title">{{user.username}}</h5>
                           <p class="card-text">{{user.carrera}}</p>

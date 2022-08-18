@@ -1,5 +1,6 @@
 window.onload = init
-var element_ant,  postTab_ant = null;
+let element_ant,  postTab_ant = null;
+let inputImg, img_preview = null
 let template_posts = null
 let TOKEN = null
 const HOST = window.location.hostname != "localhost" ? window.location.host : ""
@@ -8,7 +9,10 @@ function init(){
     template_posts = document.getElementById("posts")
     element_ant = document.querySelector("button.active")
     TOKEN = document.getElementById("token").value
+    inputImg = document.getElementById("fileperfil");
+
     initListeners()
+    
     tipo = window.location.hash ? window.location.hash[1] : "p"
     if ("pri".includes(tipo)) getPosts(tipo == "i" ? "p" : tipo)
     else {
@@ -53,16 +57,21 @@ function initListeners() {
     const formEdit = document.getElementById("formEdit")
     formEdit.addEventListener("submit", async (e)=>{
         e.preventDefault()
+
         const data = new FormData(formEdit)
         if(!not_empty(data)) return;
+        if(inputImg.value) data.append("imagen", inputImg.files[0])
+
         const btnEdit = document.getElementById("editBtn")
         btnEdit.disabled = true
+        
         const req = await fetch(`${HOST}/user-update`, {
             method: "POST",
             body: data
         })
         const res = await req.json()
         const info = await res
+        
         let titulo;
         if(info.status) titulo = "Datos actualiados correctamenete"
         else titulo =  info.msg ? info.msg : "Error del servidor"
@@ -75,6 +84,10 @@ function initListeners() {
         })
         btnEdit.disabled = false
     })
+
+    img_preview = document.getElementById("img_preview")
+    img_preview.addEventListener("click", ()=>document.getElementById("imgEdit").click());
+    inputImg.addEventListener("change", previewImg)
 
     tabs = eventTabs(".posts")
     for(let tab of tabs){
@@ -102,6 +115,14 @@ function initListeners() {
 	    .then(res=> res.json())
 	    .then(data=> console.log(data))
 	})
+    }
+}
+
+function previewImg(e){
+    e.preventDefault();
+    const file = inputImg.files
+    if(file || file.length){
+        img_preview.src = URL.createObjectURL(file[0]);
     }
 }
 

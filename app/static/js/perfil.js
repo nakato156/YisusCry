@@ -3,7 +3,7 @@ let element_ant,  postTab_ant = null;
 let inputImg, img_preview = null
 let template_posts = null
 let TOKEN = null
-const HOST = window.location.hostname != "localhost" ? window.location.host : ""
+const HOST = window.location.hostname != "localhost" ? `https://${window.location.host}` : ""
 
 function init(){
     template_posts = document.getElementById("posts")

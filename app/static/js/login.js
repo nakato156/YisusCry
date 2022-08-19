@@ -10,11 +10,12 @@ function init(){
             method: "POST",
             body: data
         })
-        const res = await req.json()
+        const res = req.status == 200 ? await req.json() : req.text();
         const info = await res
 
         if(info.status) window.location.href = "../perfil"
         else {
+            console.log(info)
             Swal.fire({
               icon: 'error',
               title: 'Datos incorrectos',

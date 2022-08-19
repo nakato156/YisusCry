@@ -8,12 +8,15 @@ function init(){
         if(!not_empty(data, ["csrf_token"])) return;
         const req = await fetch("/login", {
             method: "POST",
+            headers: {
+                'X-CSRFToken': data.get("csrf_token")
+            },
             body: data
         })
         const res = await req.json()
         const info = await res
 
-        if(info.status) window.location.href = "../perfil"
+        if(info.status) setTimeout(()=>window.location.href = "../perfil", 1200)
         else {
             Swal.fire({
               icon: 'error',

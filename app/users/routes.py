@@ -96,6 +96,9 @@ def update_user(data):
     user_ = session["user"]
     data["ciclo"] = int(data["ciclo"])
 
+    if request.files.get("imagen"):
+        print("uploading img...")
+
     if (user_["username"], user_["ciclo"], user_["carrera"]) == (data["username"], data["ciclo"], data["carrera"]):
         return {"status": True}
 

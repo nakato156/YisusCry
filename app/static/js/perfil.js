@@ -2,12 +2,18 @@ window.onload = init
 var element_ant,  postTab_ant = null;
 let template_posts = null
 let TOKEN = null
-const HOST = window.location.hostname != "localhost" ? window.location.host : ""
+let imgPreview, inputImg, labelImgPreview = null
+const HOST = window.location.hostname != "localhost" ? `https://${window.location.host}` : ""
 
 function init(){
     template_posts = document.getElementById("posts")
     element_ant = document.querySelector("button.active")
     TOKEN = document.getElementById("token").value
+
+    imgPreview = document.getElementById("img_preview");
+    inputImg = document.getElementById("fileperfil")
+    labelImgPreview = document.getElementById("imgEdit")
+
     initListeners()
     tipo = window.location.hash ? window.location.hash[1] : "p"
     if ("pri".includes(tipo)) getPosts(tipo == "i" ? "p" : tipo)
@@ -55,14 +61,21 @@ function initListeners() {
         e.preventDefault()
         const data = new FormData(formEdit)
         if(!not_empty(data)) return;
+        if(inputImg.files) data.append("imagen", inputImg.files[0])
+
         const btnEdit = document.getElementById("editBtn")
         btnEdit.disabled = true
+        
         const req = await fetch(`${HOST}/user-update`, {
             method: "POST",
+            headers: {
+                'X-CSRFToken': TOKEN,
+            },
             body: data
         })
-        const res = await req.json()
+        const res = req.status == 200 ? await req.json() : await req.text()
         const info = await res
+        
         let titulo;
         if(info.status) titulo = "Datos actualiados correctamenete"
         else titulo =  info.msg ? info.msg : "Error del servidor"
@@ -85,6 +98,9 @@ function initListeners() {
         })
     }
 
+    imgPreview.addEventListener("click", (e)=>labelImgPreview.click())
+    inputImg.addEventListener("change", loadPreviewImg);
+
     const btnDeletes = document.getElementsByClassName("delete")
     for(let i=0; i < btnDeletes.length; i++){
 	btnDeletes[i].addEventListener("click", async (e)=>{
@@ -103,6 +119,12 @@ function initListeners() {
 	    .then(data=> console.log(data))
 	})
     }
+}
+
+function loadPreviewImg(e){
+    e.preventDefault();
+    const file = inputImg.files
+    if(file.length) imgPreview.src = URL.createObjectURL(file[0]);
 }
 
 async function getPosts(tipo){

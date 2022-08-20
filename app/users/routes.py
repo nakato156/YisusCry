@@ -6,10 +6,10 @@ from app.models.Contratos import Contrato
 from app.models.Comments import Comment
 from app.models.Posts import Post
 from app.models.Users import User
-from jinja2 import Template
 from uuid import uuid4
 from os import getenv
 import mercadopago
+import requests
 
 user_routes = Blueprint('user_routes', __name__, template_folder="./templates/")
 
@@ -97,6 +97,21 @@ def update_user(data):
     data["ciclo"] = int(data["ciclo"])
 
     if request.files.get("imagen"):
+        res = requests.post(
+            f'{getenv("HostStorageFiles")}/upload-file', 
+            data = {
+                'name': user_["username"]
+            },
+            files={
+                'imagen': request.files.get("imagen").stream,
+            },
+            headers={
+                'X-CSRFToken': getenv("STORAGE_TOKEN")
+            }
+        )
+        if res.status_code != 200: 
+            print(res.text)
+            return {"status": False}
         print("uploading img...")
 
     if (user_["username"], user_["ciclo"], user_["carrera"]) == (data["username"], data["ciclo"], data["carrera"]):

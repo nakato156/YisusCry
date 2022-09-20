@@ -33,7 +33,7 @@ class Role():
         else: raise ValueError("Rol no asignado")
 
     @classmethod
-    def convert(cls, roles: list[int]) -> str:
+    def convert(cls, roles: list) -> str:
         roles_ = (str(k) for k,v in Role.ROLES.items() if v in roles)
         return cryptocode.encrypt(";".join(roles_), getenv("TKROLE"))
 

@@ -15,11 +15,11 @@ def actualizar(post: Post) -> Post:
 def get_one(post: Post) -> Post:
     return post_bd.get_one(post)
 
-def get_all(tipo: str = "") -> list[Post]:
+def get_all(tipo: str = "") -> list:
     return post_bd.get_all(tipo)
 
-def get_from_que(post: Post) -> list[Post]:
+def get_from_que(post: Post) -> list:
     return post_bd.get_form_ques(post)
 
-def get_from_user(post: Post) -> list[Post]:
+def get_from_user(post: Post) -> list:
     return post_bd.get_from_user(post)

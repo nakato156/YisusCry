@@ -19,15 +19,15 @@ def get_one(post: Post) -> Post:
     sentence = Sentence(post).select().where(("uuid", post.uuid))
     return Post(*sentence.execute())
 
-def get_all(tipo: str = "") -> list[Post]:
+def get_all(tipo: str = "") -> list:
     sentence = Sentence(Post()).select()
     if tipo: sentence = sentence.where(("tipo", tipo))
     return [Post(*post) for post in sentence.execute(select_one=False)]
 
-def get_form_ques(post: Post) -> list[Post]:
+def get_form_ques(post: Post) -> list:
     sentence = Sentence(post).select().where(('referencia', post.uuid)).where(("tipo", "r"))
     return [Post(*post) for post in sentence.execute(select_one=False)]
 
-def get_from_user(post: Post) -> list[Post]:
+def get_from_user(post: Post) -> list:
     sentence = Sentence(post).select().where(('autor_id', post.autor_id)).where(('tipo', post.tipo))
     return [Post(*post_) for post_ in sentence.execute(select_one=False)]

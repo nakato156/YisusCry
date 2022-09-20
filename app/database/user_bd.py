@@ -45,7 +45,7 @@ def get_one(user: User) -> User:
     data = Sentence(user).select().where(("uuid", user.uuid)).where(("username", user.username), "OR").execute()
     return User(*data)
 
-def get_all() -> list[User]:
+def get_all() -> list:
     return [User(*user) for user in Sentence(User()).select().where(('uuid', "!=", "1")).execute(select_one=False)]
 
 def get_data(user: User) -> User:

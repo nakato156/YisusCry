@@ -12,7 +12,7 @@ def eliminar(comentario: Comment) -> bool:
         return True
     except: return False
 
-def get_comments(comentario: Comment) -> list[Comment]:
+def get_comments(comentario: Comment) -> list:
     table = getenv("BD_TABLE_USERS")
     select = f"SELECT {table}.username, &TABLE&.comentario, &TABLE&.fecha FROM `&TABLE&` INNER JOIN {table} ON &TABLE&.user_id = {table}.uuid"
     sentence = Sentence(comentario).free(select+" WHERE &TABLE&.post_id = {}", (comentario.post_id, ), results=True)

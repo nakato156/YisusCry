@@ -27,7 +27,7 @@ def get(user: User) -> User:
 def get_one(user: User) -> User:
     return user_bd.get_one(user)
 
-def get_all() -> list[User]:
+def get_all() -> list:
     return user_bd.get_all()
 
 def get_data(user: User) -> User:

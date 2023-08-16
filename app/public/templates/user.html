@@ -10,7 +10,7 @@
         <div class="col-9 gy-4">
             <div id="inicio" class="row row-cols-2">
                 <div class="col-3">
-                    <img class="img-thumbnail rounded" src="{{get_img(username)}}" alt="">
+                    <img class="img-thumbnail rounded" src="{{get_img(hash_foto or DEFAULT_FT)}}" alt="">
                 </div>
                 <div class="col-9">
 		            <h3>{{username}}{%if role.has('admin')%}&nbsp;<p style="color:red;">&diams;</p>{%endif%}</h3>

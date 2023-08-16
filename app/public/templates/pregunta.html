@@ -8,20 +8,23 @@
 
 {%block body%}
 <div class="container-fluid ml-5 mr-5 p-4">
-    <div class="row justify-content-center">
-        <div class="col-7">
+    <div class="alert alert-info position-absolute d-none col-7" role="alert">
+        Necesita iniciar sesi&oacute;n para votar
+    </div>
+    <div class="row justify-content-center m-auto col-7">
+        <div>
             <div class="row row-cols-2 mb-3">
                 <div class="col-12 titulo mb-1">
                     <div class="row"><h3>{{titulo}}</h3></div>
                 </div>
-                <div class="col-2">
+                <div class="col-1">
                     <div class="vstack gap-1 votos">
                         <div class="text-center"><i class="bx bxs-up-arrow" style="cursor:pointer;"></i></div>
                         <div class="text-center"><p style="margin:auto;">{{votos}}</p></div>
                         <div class="text-center"><i class="bx bxs-down-arrow" style="cursor:pointer;"></i></div>
                     </div>
                 </div>
-                <div class="col-9">
+                <div class="col-11">
                     <div class="row" id="contenido" style="width: 60vw;">{{contenido}}</div>
                     <div class="row float-end">
                         <div class="card" style="width: 10rem;">
@@ -43,15 +46,62 @@
                 {%endfor%}
             </div>
         </div>
-        <div class="col-7">
+        <div>
             <div class="row">
                 <p bs="{{'user' in session}}" data="{{csrf_token()}}" id="comentario" style="cursor:pointer;">Añadir comentario</p>
+            </div>
+        </div>
+        <div>
+            {% for respuesta in respuestas%}
+            {%endfor%}
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-12 mb-1">
+                    <div class="row"><h3>Tu respuesta</h3></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="w-full p-3 border rounded-3">
+                    <div class="container col-12">
+                        <div id="boxRespuesta" class="mb-3"></div>
+                        <div class="position-relative">
+                            <div class="line" style="background-color: whitesmoke;"></div>
+                            <div id="addCode" class="circle left d-flex justify-content-center position-absolute rounded-circle" style="cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                                </svg>                          
+                            </div>
+                            <div id="addTexto" class="circle right d-flex justify-content-center position-absolute rounded-circle" style="cursor: pointer;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>                          
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 p-3">
+                    <button class="btn btn-primary" id="btnPublicarRespuesta">Publicar</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 {%endblock%}
 {%block scripts%}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/monaco-editor@0.8.3/min/vs/loader.js"></script>
+<script>
+require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.8.3/min/vs' }});
+window.MonacoEnvironment = { getWorkerUrl: () => proxy };
+
+let proxy = URL.createObjectURL(new Blob([`
+	self.MonacoEnvironment = {
+		baseUrl: 'https://unpkg.com/monaco-editor@0.8.3/min/'
+	};
+	importScripts('https://unpkg.com/monaco-editor@0.8.3/min/vs/base/worker/workerMain.js');
+`], { type: 'text/javascript' }));
+</script>
 <script src="{{url_for('static', filename='js/pregunta.js')}}"></script>
 <script src="{{url_for('static', filename='js/parse_code.js')}}"></script>
 {%endblock%}

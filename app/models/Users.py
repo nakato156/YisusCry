@@ -20,6 +20,7 @@ class User(BaseModel):
     info:str   =    attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(200)], converter=lambda x: str(x) if x else "")
     fecha: str =    attr.field(default="")
     role:str =      attr.field(default='pw==*zaNDWhNkWE6nfKNFzUrOxg==*Lad3Ppi6a3VCpH/6GCyudg==*O3fmPCh+W3WHTJfVqM9Iww==')
+    hash_foto:str = attr.field(default="")
 
     def __attrs_post_init__(self):
         setattr(self, "__table", getenv("BD_TABLE_USERS"))

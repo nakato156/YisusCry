@@ -10,7 +10,7 @@ public_routes = Blueprint("public_routes", __name__, template_folder="./template
 
 @public_routes.get("/")
 def index():
-    cursos = ["cpl1", "mat_basic", "creatividad", "etica", "progra"]
+    cursos = ["progra1", "calculo1", "calculo2", "progra2", "algoritmos", "mate_discreta"]
     return render_template("index.html", cursos = cursos, users = users_controller.get_all())
 
 @public_routes.get("/registro")

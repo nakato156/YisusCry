@@ -4,6 +4,7 @@ from app.controllers import post_controller, users_controller, comment_controlle
 from app.functions.RoleManager import Role
 from app.models.Contratos import Contrato
 from app.models.Comments import Comment
+from flask_wtf.csrf import CSRFProtect
 from app.models.Posts import Post
 from app.models.Users import User
 from uuid import uuid4
@@ -133,6 +134,17 @@ def public_comentario():
     post_id = json.get("post_id")
     comentario = Comment(comentario=comentario, user_id=session["user"]["uuid"], post_id=post_id)
     comment_controller.save(comentario)
+    return {"status": "test"}
+
+@user_routes.post("/publicar/respuesta")
+def public_respuesta():
+    if not "user" in session: return abort(401)
+    json = request.json
+    print(json)
+    # respuesta = json.get("respuesta")
+    # comment_id = json.get("comment_id")
+    # respuesta = Comment(respuesta=respuesta, user_id=session["user"]["uuid"], comment_id=comment_id)
+    # comment_controller.save(respuesta)
     return {"status": "test"}
 
 @user_routes.post("/get-transactions")

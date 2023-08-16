@@ -12,21 +12,20 @@
     <div class="carousel-cursos">
         {%for curso in cursos%}
         <div class="item-curso barimg">
-            <img target="{{url_for('static', filename='imgs/'+curso+'.png')}}" alt="...">
+            <img target="{{url_for('static', filename='imgs/'+curso+'.png')}}" alt="{{curso}}">
         </div>
         {%endfor%}
     </div>
 </div>
-
 <section class="profesores">
-    <div class="separador">Yisus m&aacute;s activos</div>
+    <div class="separador text-white font-size-32">Yisus m&aacute;s activos</div>
     <div class="container-fluid d-flex">
         <div class="mostrar-yisus">
             <div class="row p-3">
                 {% for user in users %}
                 <div class="col">
                     <div class="card w-20" style="width: 15rem;">
-			            <img src="{{get_img(user.username)}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
+			            <img src="{{get_img(user.hash_foto or DEFAULT_FT)}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
                         <div class="card-body">
                           <h5 class="card-title">{{user.username}}</h5>
                           <p class="card-text">{{user.carrera}}</p>

@@ -5,3 +5,40 @@
 .votos {
     font-size: 22px;
 }
+
+.line {
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+}
+
+.circle {
+    color: #000;
+    align-items: center;
+    width: 33px;
+    height: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: whitesmoke;
+}
+
+.circle.left {
+    left: calc(50% - 60px);
+}
+.circle.right {
+    left: calc(50% + 20px);
+}
+
+.estilosEditor {
+    height: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 7px;
+}
+.estilosEditor > .icon {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    z-index: 1000;
+}

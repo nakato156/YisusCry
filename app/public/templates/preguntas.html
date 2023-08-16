@@ -2,24 +2,25 @@
 
 {%block head%}
 <title>Preguntas</title>
+<script src="https://cdn.tailwindcss.com"></script>
 {%endblock%}
 
 {%block body%}
 {%for post in preguntas%}
 <div class="container p-4">
     <div class="row form-control mb-2 d-flex">
-        <div class="col-2">
+        <div class="w-1/6">
             <div class="row text-center">
-                <div class="col-12">{{post.votos}}</div>
-                <div class="col-12">Votos</div>
+                <div class="w-full">{{post.votos}}</div>
+                <div class="w-full">Votos</div>
             </div>
         </div>
-        <div class="col-10">
-            <div class="row">
-                <div class="col-12">
-                    <a href="../pregunta/{{post.uuid}}" class="text-start mb-0" style="cursor: pointer; text-decoration: none; color: black;">{{post.titulo}}</a>
+        <div class="w-5/6">
+            <div class="row dark:text-white">
+                <div class="w-full">
+                    <a href="../pregunta/{{post.uuid}}" class="text-start mb-0" style="cursor: pointer; text-decoration: none;">{{post.titulo}}</a>
                 </div>
-                <div class="col-12">
+                <div class="w-full">
                     <p class="text-end mb-1" data-bs-toggle="tooltip" data-bs-title="${post.fecha_edicion}">{{post.fecha_edicion}}</p>
                 </div>
             </div>

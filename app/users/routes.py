@@ -4,13 +4,13 @@ from app.controllers import post_controller, users_controller, comment_controlle
 from app.functions.RoleManager import Role
 from app.models.Contratos import Contrato
 from app.models.Comments import Comment
-from flask_wtf.csrf import CSRFProtect
 from app.models.Posts import Post
 from app.models.Users import User
 from uuid import uuid4
 from os import getenv
 import mercadopago
 import requests
+from pprint import pprint
 
 user_routes = Blueprint('user_routes', __name__, template_folder="./templates/")
 
@@ -94,7 +94,7 @@ def contratar():
 @valid_data_user(("username", "ciclo", "carrera"))
 @delete_csrf
 def update_user(data):
-    user_ = session["user"]
+    user_:dict = session["user"]
     data["ciclo"] = int(data["ciclo"])
 
     if request.files.get("imagen"):
@@ -124,15 +124,17 @@ def update_user(data):
 
     user_.update(data)
     session["user"] = user_
+    pprint(session["user"])
     return {"status": True}
 
 @user_routes.post("/public-comment")
 def public_comentario():
     if not "user" in session: return abort(401)
-    json = request.json
-    comentario = json.get("comentario")
-    post_id = json.get("post_id")
-    comentario = Comment(comentario=comentario, user_id=session["user"]["uuid"], post_id=post_id)
+    json:dict = request.json
+    comentario:str = json.get("comentario")
+    post_id:str = json.get("post_id")
+    if not comentario.strip() or not post_id.strip(): return abort(400)
+    comentario = Comment(comentario=comentario.strip(), user_id=session["user"]["uuid"], post_id=post_id.strip())
     comment_controller.save(comentario)
     return {"status": "test"}
 
@@ -150,6 +152,7 @@ def public_respuesta():
 @user_routes.post("/get-transactions")
 def get_transacciones():
     if not 'user' in session: return abort(401)
+    if 'imagen' in session["user"]: session["user"].pop("imagen")
     user = User(**session["user"])
     data = users_controller.get_transacciones(user)
     print(data)

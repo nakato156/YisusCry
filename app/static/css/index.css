@@ -1,3 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam&family=Satisfy&display=swap');
+.banner {
+    height: 60vh;
+    background: #06beb6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #48b1bf, #06beb6);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #48b1bf, #06beb6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+    position: relative;
+}
+.caja {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.letras, .imagen {
+    margin-top: 2rem;
+    font-size: 35px;
+    width: 40%;
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.letras .tranqui {
+    font-size: 45px;
+    font-family: 'Satisfy', cursive;
+}
+.letras .mensaje {
+    font-family: 'Kalam', cursive;
+}
+.banner > svg {
+    position: absolute;
+    bottom: -190px;
+    z-index: -1;
+}
+.imagen > img {
+    z-index: 2;
+    max-width: 80%;
+}
 .carousel-cursos {
     padding: 10px 0;
     max-width: 96%;
@@ -20,4 +59,17 @@
     width: 100%;
     height: 30px;
     background: #fba919;
+}
+
+.preguntas {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.preguntas > div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 75%;
+    background-color: #48b1bf;
 }

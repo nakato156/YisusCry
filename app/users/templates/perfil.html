@@ -24,7 +24,7 @@
             <div id="inicio" class="row row-cols-2">
                 <div class="col-sm-6 col-md-6 col-lg-3">
                     <img class="img-thumbnail rounded"
-                        src="{{get_img(username)}}" alt="">
+                        src="{{get_img(hash_foto or DEFAULT_FT)}}" alt="">
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-9">
                     <h3>{{username}}</h3>
@@ -58,7 +58,7 @@
             <div id="editar" class="row row-cols-2" style="display:none">
                 <div id="change-img" class="col-3">
                     <img id="img_preview" class="img-thumbnail rounded"
-                        src="{{get_img(username)}}" alt="">
+                        src="{{get_img(hash_foto or DEFAULT_FT)}}" alt="">
                     <label id="imgEdit" for="fileperfil"></label>
                     <input type="file" style="display:none" name="perfil" id="fileperfil" accept="image/">
                 </div>
@@ -86,7 +86,7 @@
                                 </select>
                             </div>
                         </div>
-                        <button id="editBtn" class="btn btn-dark">Guardar cambios</button>
+                        <button id="editBtn" type="submit" class="btn btn-dark">Guardar cambios</button>
                         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                     </form>
                 </div>
@@ -173,10 +173,18 @@
                             </div>
                         </div>
 
-                          <button class="btn btn-success" id="updateUser">Guardar Cambios</button>
+                          <button class="btn btn-success" id="updateUser" disabled>Guardar Cambios</button>
                     </form>
                     <div class="row mt-2">
-                        <button class="btn btn-danger" id="deleteUser" disabled>Eliminar usuario</button>
+                        <div class="col-md d-none">
+                            <button class="btn btn-warning w-100" id="suspendUser" disabled>Suspender usuario</button>
+                        </div>
+                        <div class="col-md d-none">
+                            <button class="btn btn-success w-100" id="activarUser" disabled>Activar usuario</button>
+                        </div>
+                        <div class="col-md">
+                            <button class="btn btn-danger w-100" id="deleteUser" disabled>Eliminar usuario</button>
+                        </div>
                     </div>
                 </div>
             </div>

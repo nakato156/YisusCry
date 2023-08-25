@@ -14,6 +14,7 @@ class User(BaseModel):
     username: str = attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(90)])
     codigo: str =   attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(11)])
     password: str = attr.field(default="",  validator=attr.validators.instance_of(str), repr=False)
+    id_estado_cuenta: int = attr.field(default=1,  validator=[attr.validators.instance_of(int)])
     carrera: str =  attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(100)])
     edad: int =     attr.field(default=0,   validator=[attr.validators.instance_of(int),  lambda _, _attr,val:  valid(val in range(90))])
     ciclo: int =    attr.field(default=0,   validator=[attr.validators.instance_of(int),  lambda _, _attr,val: valid(val in range(11))])

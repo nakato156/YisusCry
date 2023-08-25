@@ -32,11 +32,11 @@ def auth(user: User) -> User:
     return User(*data)
 
 def get(user: User) -> User:
-    data = Sentence(user).select()
-    campos = user.get_object(("role", "edad", "ciclo", "carrera", "info"))
+    query = Sentence(user).select()
+    campos = user.get_object(ignore=("role", "id_estado_cuenta"))
     for k,v in campos.items():
-        if v: data.where((k, v))
-    res = data.execute()
+        if v: query.where((k, v))
+    res = query.execute()
     if not res: raise UserNotFound
     return User(*res)
 

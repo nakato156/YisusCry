@@ -8,6 +8,31 @@
 {%endblock%}
 
 {% block body %}
+<section class="banner">
+    <div class="caja">
+        <div class="letras">
+            <h3>
+                <span class="tranqui">Tranqui</span>
+                <span class="mensaje">, no temas he aquí tus salvadores :D</span>
+            </h3>
+            <span>(index, 15)</span>
+        </div>
+        <div class="imagen">
+            <img src="{{url_for('static', filename='imgs/yisus.png')}}" alt="yisus">
+        </div>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <defs>
+            <linearGradient id="miDegradado" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#48b1bf" />
+              <stop offset="100%" stop-color="#06beb6" />
+              <stop offset="0%" stop-color="rgba(0, 0, 0, 0)" />
+              <stop offset="100%" stop-color="rgba(0, 0, 0, 0.5)" />
+            </linearGradient>
+        </defs>
+        <path fill="url(#miDegradado)" fill-opacity="1" d="M0,288L0,224L65.5,224L65.5,160L130.9,160L130.9,64L196.4,64L196.4,128L261.8,128L261.8,64L327.3,64L327.3,192L392.7,192L392.7,128L458.2,128L458.2,64L523.6,64L523.6,160L589.1,160L589.1,64L654.5,64L654.5,160L720,160L720,224L785.5,224L785.5,64L850.9,64L850.9,128L916.4,128L916.4,192L981.8,192L981.8,64L1047.3,64L1047.3,32L1112.7,32L1112.7,64L1178.2,64L1178.2,160L1243.6,160L1243.6,256L1309.1,256L1309.1,192L1374.5,192L1374.5,224L1440,224L1440,0L1374.5,0L1374.5,0L1309.1,0L1309.1,0L1243.6,0L1243.6,0L1178.2,0L1178.2,0L1112.7,0L1112.7,0L1047.3,0L1047.3,0L981.8,0L981.8,0L916.4,0L916.4,0L850.9,0L850.9,0L785.5,0L785.5,0L720,0L720,0L654.5,0L654.5,0L589.1,0L589.1,0L523.6,0L523.6,0L458.2,0L458.2,0L392.7,0L392.7,0L327.3,0L327.3,0L261.8,0L261.8,0L196.4,0L196.4,0L130.9,0L130.9,0L65.5,0L65.5,0L0,0L0,0Z" data-darkreader-inline-fill="" style="--darkreader-inline-fill: #3c977b;"></path>
+    </svg>
+</section>
 <div id="corouselcursos">
     <div class="carousel-cursos">
         {%for curso in cursos%}
@@ -38,6 +63,8 @@
             </div>
         </div>
     </div>
+</section>
+<section class="preguntas" id="algunasPreguntas">
 </section>
 {%endblock%}
 

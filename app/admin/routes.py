@@ -20,14 +20,26 @@ def info_user():
         res["role"] = Role(res["role"]).roles
         res["masRoles"] = list(set(Role.ROLES.values()) - set(res["role"].values()) )
     except UserNotFound: res = {}
-
     return {"status": True, "info": res}
 
 @admin_routes.put("/user-update")
 @login_required
 def update_user():
     data = request.form.to_dict()
+    print(data)
     roles = Role.convert(set(data["roles"].split(",")))
     user = User(uuid=data["uuid"], username=data["username"], role=roles)
     users_controller.actualizar(user)
     return {"status": True}
+
+@admin_routes.put("/state-account-user")
+@login_required
+def suspend_user():
+    data:dict = request.json
+    estado:int = 1 if data.get("reactivar") else 2
+    try:
+        user = User(uuid=data["uuid"], id_estado_cuenta=estado)
+        users_controller.actualizar(user)
+        return {"status": True}
+    except Exception as e:
+        return {"status": False}

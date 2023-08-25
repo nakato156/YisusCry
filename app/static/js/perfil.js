@@ -57,13 +57,13 @@ function initListeners() {
     })
 
     const formEdit = document.getElementById("formEdit")
-    formEdit.addEventListener("submit", async (e)=>{
+    const btnEdit = document.getElementById("editBtn")
+    btnEdit.addEventListener("click", async (e)=>{
         e.preventDefault()
         const data = new FormData(formEdit)
         if(!not_empty(data)) return;
         if(inputImg.files) data.append("imagen", inputImg.files[0])
 
-        const btnEdit = document.getElementById("editBtn")
         btnEdit.disabled = true
         
         const req = await fetch(`${HOST}/user-update`, {
@@ -103,21 +103,21 @@ function initListeners() {
 
     const btnDeletes = document.getElementsByClassName("delete")
     for(let i=0; i < btnDeletes.length; i++){
-	btnDeletes[i].addEventListener("click", async (e)=>{
-	    const element = e.target
-	    let target = element.getAttribute("target")
+        btnDeletes[i].addEventListener("click", async (e)=>{
+            const element = e.target
+            let target = element.getAttribute("target")
 
-	    fetch("/config-delete",{
-		method: "DELETE",
-		headers: {
-		    "Content-Type": "application/json",
-		    "X-CSRFToken": TOKEN
-		},
-		body: JSON.stringify({data: target})
-	    })
-	    .then(res=> res.json())
-	    .then(data=> console.log(data))
-	})
+            fetch("/config-delete",{
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": TOKEN
+            },
+            body: JSON.stringify({data: target})
+            })
+            .then(res=> res.json())
+            .then(data=> console.log(data))
+        })
     }
 }
 

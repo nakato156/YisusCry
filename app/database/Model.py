@@ -13,6 +13,7 @@ class Sentence(BD):
         self._where: list   = list()
         self._set: list     = list()
         self.func: str      = ""
+        self._limit: int    = -1
 
     def where(self, condicion: tuple, tipo: str = "AND"):
         op = "="
@@ -39,6 +40,7 @@ class Sentence(BD):
         sentence = f"{self.sentence} {add}" + \
                    (','.join(self._set) if self._set else "") + \
                    (' WHERE ' + ' '.join(self._where) if self._where else "")
+        if self._limit != -1: self.sentence += f" LIMIT {self._limit}"
         return sentence
 
     def count(self):
@@ -55,6 +57,10 @@ class Sentence(BD):
         self.sentence = f"SELECT"
         self.tipo = self.sentence
         self.campos = campos
+        return self
+
+    def limit(self, limite: int):
+        self._limit = limite
         return self
 
     def update(self, data: dict):

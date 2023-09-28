@@ -105,7 +105,7 @@ function publicar(contenido){
 async function publicar_comentario(e){
     if(e.key != "Enter" || e.code != "Enter") return;
     comentario.disabled = true;
-    const req = await fetch("/public-comment", {
+    const req = await fetch("/publicar-comentario", {
         method: "POST",
         body: JSON.stringify({
             "comentario": comentario.value,
@@ -120,10 +120,6 @@ async function publicar_comentario(e){
     if(res.satus == 200 ){
         publicar(document.getElementById("BoxComment").value)
     }else if(res.status == 401) window.href = "../../login"
-
-}
-
-function checkRespuesta(){
 
 }
 
@@ -167,7 +163,7 @@ async function publicar_respuesta(e){
     const respuestaValida = checkRespuesta(respuesta)
     if(!respuestaValida) return;
     console.log(respuesta)
-    fetch('/publicar/respuesta', {
+    fetch('/publicar-respuesta', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -176,5 +172,5 @@ async function publicar_respuesta(e){
     })
     .then(res => res.text())
     .then(data => console.log(data))
-    .catch(err => console.log("erro:",err))
+    .catch(err => console.log("error:",err))
 }

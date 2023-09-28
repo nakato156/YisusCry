@@ -66,7 +66,7 @@ function initListeners() {
 
         btnEdit.disabled = true
         
-        const req = await fetch(`${HOST}/user-update`, {
+        const req = await fetch(`${HOST}/actualizar-cuenta`, {
             method: "POST",
             headers: {
                 'X-CSRFToken': TOKEN,
@@ -101,24 +101,24 @@ function initListeners() {
     imgPreview.addEventListener("click", (e)=>labelImgPreview.click())
     inputImg.addEventListener("change", loadPreviewImg);
 
-    const btnDeletes = document.getElementsByClassName("delete")
-    for(let i=0; i < btnDeletes.length; i++){
-        btnDeletes[i].addEventListener("click", async (e)=>{
-            const element = e.target
-            let target = element.getAttribute("target")
-
-            fetch("/config-delete",{
+    const btnEliminarCuenta = document.getElementById("btnEliminarCuenta")
+    btnEliminarCuenta.addEventListener("click", async (e)=>{
+        fetch("/eliminar-cuenta",{
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": TOKEN
             },
-            body: JSON.stringify({data: target})
-            })
-            .then(res=> res.json())
-            .then(data=> console.log(data))
         })
-    }
+        .then(res=> res.json())
+        .then(data=> {
+            console.log(data)
+            if(data.status){
+                Swal.fire("Cuenat eliminada", "Su cuenta ha sido eliminada con éxito", "success")
+                .then(()=> location.href = "/")
+            }
+        })
+    })
 }
 
 function loadPreviewImg(e){

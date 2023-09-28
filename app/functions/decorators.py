@@ -26,7 +26,7 @@ def delete_csrf(func):
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not "user" in session: return redirect("/login")
+        if not "user" in session: return redirect("/login") if request.method == "GET" else abort(401)
         return func(*args, **kwargs)
     return wrapper
 

@@ -2,6 +2,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 <title>Yisus ayuda</title>
@@ -50,7 +51,7 @@
                 {% for user in users %}
                 <div class="col">
                     <div class="card w-20" style="width: 15rem;">
-			            <img src="{{get_img(user.hash_foto or DEFAULT_FT)}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
+			            <img src="{{get_img(user.hash_foto)}}" class="card-img-top" alt="{{user.username}}" loading="lazy">
                         <div class="card-body">
                           <h5 class="card-title">{{user.username}}</h5>
                           <p class="card-text">{{user.carrera}}</p>
@@ -64,7 +65,43 @@
         </div>
     </div>
 </section>
-<section class="preguntas" id="algunasPreguntas">
+<section class="container mas">
+    <div class="row justify-content-evenly">
+        <div class="col-4">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">Algunas preguntas</a>
+                <a href="/preguntas" class="list-group-item list-group-item-action">Preguntas recientes</a>
+              </div>
+        </div>
+        <div class="col-7 preguntas" id="algunasPreguntas">
+            <div class="row form-contro mb-2 d-flex">
+                <div class="w-1/6">
+                    <div class="row">
+                        <div class="w-full"><p class="card-text placeholder-glow"><span class="placeholder col-1"></span></p></div>
+                        <div class="w-full">Votos</div>
+                    </div>
+                </div>
+                <div class="w-5/6">
+                    <div class="row dark:text-white">
+                        <div class="w-full">
+                            <p class="text-start mb-0" style="cursor: pointer; text-decoration: none;">
+                                <p class="card-text placeholder-glow">
+                                    <span class="placeholder col-2"></span>
+                                    <span class="placeholder col-1"></span>
+                                    <span class="placeholder col-2"></span>
+                                    <span class="placeholder col-1"></span>
+                                    <span class="placeholder col-6"></span>
+                                </p>
+                            </p>
+                        </div>
+                        <div class="w-full">
+                            <p class="text-end mb-1"><p class="card-text placeholder-glow"><span class="placeholder col-3"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {%endblock%}
 

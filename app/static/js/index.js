@@ -1,13 +1,14 @@
 window.onload = init
 
 function init() {
-    loadImages();
     $('.carousel-cursos').slick({
-      slidesToShow: setCantSlides(),
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 1400,
+        slidesToShow: setCantSlides(),
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 1400,
     });
+    loadImages();
+    loadPreguntas();
 }
 
 function loadImages(){
@@ -42,6 +43,7 @@ function loadPreguntas(){
     .then(res => res.json())
     .then(preguntas => {
         preguntas.forEach(post => {
+            console.log(post)
             temp +=`<div class="container p-4">
                 <div class="row form-control mb-2 d-flex">
                     <div class="w-1/6">
@@ -63,6 +65,6 @@ function loadPreguntas(){
                 </div>
             </div>`      
         });
-        document.getElementById('preguntas').innerHTML = temp;
+        document.getElementById('algunasPreguntas').innerHTML = temp;
     })
 }

@@ -14,55 +14,45 @@ from pprint import pprint
 
 user_routes = Blueprint('user_routes', __name__, template_folder="./templates/")
 
-@user_routes.get("/perfil")
+@user_routes.before_request
 @login_required
+def user_before_request():
+    if session["user"]["id_estado_cuenta"] == 2:
+        return render_template("suspendido.html")
+
+@user_routes.get("/perfil")
 def perfil():
     roles = Role(session["user"]["role"])
     return render_template("perfil.html", **session["user"], roles=roles)
 
 @user_routes.get("/salir")
-@login_required
 def salir():
     session.pop("user")
     return redirect("/")
 
 @user_routes.get("/preguntar")
-@login_required
 def preguntar():
     return render_template("formular.html", PUBLIC_KEY=getenv("PUBLIC_KEY"))
 
 @user_routes.get("/my-posts")
-@login_required
 def get_posts():
     user_posts = Post(autor_id=session["user"].get("uuid"), tipo=request.args.get("tipo", "P"))
     data_posts = post_controller.get_from_user(user_posts)
     return {"data": [data.get_object() for data in data_posts]}
 
 @user_routes.post("/crear-pregunta")
-@login_required
 @delete_csrf
 def crear_post(data):
     data: dict = request.json
     data_post: dict = data.get("data_post")
 
     id_post = str(uuid4())
-    sdk = mercadopago.SDK(getenv("ACCESS_TOKEN"))
-    nuevo_post = Post(uuid=id_post, autor_id=session["user"].get("uuid"), tipo ="p", **data_post)
-
-    data_payment: dict = data.get("data_payment")
-    data_payment.update(nuevo_post.data_pago())
-
-    is_admin = Role(session["user"]["role"]).has("admin")
-
-    if not is_admin:
-        preference_response = sdk.payment().create(data_payment)
-        preference = preference_response["response"]
-
-    if preference["status"].lower() == "approved" or is_admin:
+    try:
+        nuevo_post = Post(uuid=id_post, autor_id=session["user"].get("uuid"), tipo ="p", **data_post)
         res = post_controller.crear(nuevo_post)
         return {"status": res, "id": id_post}
-        
-    return {"status": False}
+    except:
+        return {"status": False}
 
 @user_routes.post("/contratar")
 def contratar():
@@ -70,7 +60,7 @@ def contratar():
 
     sdk = mercadopago.SDK(getenv("ACCESS_TOKEN"))
     
-    data = request.json
+    data:dict = request.json
     data_payment = data.get("data_payment")
     data_user = data.get("data_user")
     
@@ -90,7 +80,7 @@ def contratar():
         return {"status": True}
     return {"status": False}
 
-@user_routes.post("/user-update")
+@user_routes.post("/actualizar-cuenta")
 @valid_data_user(("username", "ciclo", "carrera"))
 @delete_csrf
 def update_user(data):
@@ -127,7 +117,7 @@ def update_user(data):
     pprint(session["user"])
     return {"status": True}
 
-@user_routes.post("/public-comment")
+@user_routes.post("/publicar-comentario")
 def public_comentario():
     if not "user" in session: return abort(401)
     json:dict = request.json
@@ -138,7 +128,7 @@ def public_comentario():
     comment_controller.save(comentario)
     return {"status": "test"}
 
-@user_routes.post("/publicar/respuesta")
+@user_routes.post("/publicar-respuesta")
 def public_respuesta():
     if not "user" in session: return abort(401)
     json = request.json
@@ -149,21 +139,11 @@ def public_respuesta():
     # comment_controller.save(respuesta)
     return {"status": "test"}
 
-@user_routes.post("/get-transactions")
-def get_transacciones():
-    if not 'user' in session: return abort(401)
-    if 'imagen' in session["user"]: session["user"].pop("imagen")
-    user = User(**session["user"])
-    data = users_controller.get_transacciones(user)
-    print(data)
-    return {"status": "test", "detalles": data["detalles"]}
-
-@user_routes.delete("/config-delete")
-@login_required
+@user_routes.delete("/eliminar-cuenta")
 def delete():
-    data = request.json.get("data")
-    if data == "yisus":
-        pass #eliminar config de user
-    elif data == "cuenta":
+    try:
         users_controller.eliminar(User(**session["user"]))
-    return {"status": "test"}
+        session.pop("user")
+        return {"status": "test"}
+    except:
+        return {"status": False}

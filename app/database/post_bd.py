@@ -15,6 +15,10 @@ def actualizar(post: Post) -> Post:
     Sentence(post).update(post.get_object()).where(("uuid", post.uuid)).execute()
     return post
 
+def get(limit: int) -> list[Post]:
+    sentence = Sentence(Post()).select().limit(limit)
+    return [Post(*post) for post in sentence.execute(select_one=False)]
+
 def get_one(post: Post) -> Post:
     sentence = Sentence(post).select().where(("uuid", post.uuid))
     return Post(*sentence.execute())

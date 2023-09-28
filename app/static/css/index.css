@@ -60,16 +60,15 @@
     height: 30px;
     background: #fba919;
 }
-
-.preguntas {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+.mas {
+    margin: 2rem 0;
 }
-
 .preguntas > div {
     display: flex;
     flex-wrap: wrap;
-    width: 75%;
+    width: 100%;
+}
+
+.list-group-item.active {
     background-color: #48b1bf;
 }

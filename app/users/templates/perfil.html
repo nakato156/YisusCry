@@ -12,7 +12,6 @@
             <div id="myTab" class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical">
                 <button class="nav-link active bg-dark" target="inicio" data-bs-toggle="pill" type="button" role="tab" aria-selected="true">Inicio <i class='bx bxs-home'></i></button>
                 <button class="nav-link" target="editar" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Editar Perfil <i class='bx bxs-edit-alt'></i></button>
-                <button class="nav-link" target="transacciones" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Transacciones <i class='bx bx-money'></i></button>
                 <button class="nav-link" target="config" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Configuraci&oacute;n <i class='bx bx-cog'></i></button>
                 {%if roles.has('admin')%}
                 <button class="nav-link" target="template_admin" data-bs-toggle="pill" type="button" role="tab" aria-selected="false">Administraci&oacute;n <i class='bx bx-user'></i></button>
@@ -94,31 +93,11 @@
             <div id="config" class="row row-cols-2 justify-content-center" style="display: none;">
                 <div class="col-8">
                     <div class="row mb-1">
-                        <button class="btn btn-danger delete" target="cuenta">Eliminar cuenta</button>
+                        <button class="btn btn-danger delete" id="btnEliminarCuenta">Eliminar cuenta</button>
                     </div>
-                    {%if not roles.has('yisus')%}
-                    <div class="row mb-1">
-                        <button class="btn btn-success">Ser Yisus</button>
-                    </div>
-                    {%else%}
-                    <div class="row mb-1">
-                        <button class="btn btn-danger delete" target="yisus">Dejar de ser Yisus</button>
-                    </div>
-                    {%endif%}
                 </div>
             </div>
-            <div id="transacciones" class="row row-cols-2" style="display: none;" fetch="true">
-                <div class="col-4"></div>
-                <input type="hidden" id="token" value="{{csrf_token()}}">
-                <div class="col-9 p-3">
-                    {% if roles.has('yisus')%}
-                    <label>Contratos</label>
-                    <div id="contratos"></div>
-                    {%endif%}
-                    <label>Usuarios contratados</label>
-                    <div id="tables"></div>
-                </div>
-            </div>
+            <input type="hidden" id="token" value="{{csrf_token()}}">
             {%if roles.has('admin')%}
             <div id="template_admin" class="row justify-content-center" style="display: none;">
                 <div class="col-sm-12 col-md-12 col-lg-9 p-3">

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, request
+from flask import Blueprint, render_template, session, request, jsonify
 from app.functions.decorators import delete_csrf, valid_data_user, save_logger, not_login
 from app.controllers import users_controller, post_controller, comment_controller
 from app.models.Comments import Comment
@@ -12,6 +12,10 @@ public_routes = Blueprint("public_routes", __name__, template_folder="./template
 def index():
     cursos = ["progra1", "calculo1", "calculo2", "progra2", "algoritmos", "mate_discreta"]
     return render_template("index.html", cursos = cursos, users = users_controller.get_all())
+
+@public_routes.get('/get-preguntas')
+def get_preguntas():
+    return jsonify([post.get_object(ignore=('contenido', 'referencia', "autor_id", "fecha_publicado")) for post in post_controller.get(3)])
 
 @public_routes.get("/registro")
 @not_login
@@ -36,7 +40,6 @@ def post_registro(data):
         res = {"status": False, "error": "Datos ya registrados :c"}
     return res
 
-
 @public_routes.get("/login")
 @not_login
 def login():
@@ -46,7 +49,6 @@ def login():
 @not_login
 @valid_data_user()
 @delete_csrf
-@save_logger
 def login_user(data):
     data_user = User(**data)
     try:
@@ -86,6 +88,7 @@ def get_user(id: str):
     user = User(uuid = id)
     posts = users_controller.count_posts(user)
     return render_template("user.html", **users_controller.get_one(user).get_object(ignore=('password', 'fecha'), convert=True), **posts, PUBLIC_KEY=getenv("PUBLIC_KEY"))
+
 @public_routes.get("/denuncia")
 def denuncia():
     id = request.args.get("id")

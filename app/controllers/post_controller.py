@@ -12,14 +12,17 @@ def actualizar(post: Post) -> Post:
     post_bd.actualizar(Post)
     return post
 
+def get(limit: int) -> list[Post]:
+    return post_bd.get(limit)
+
 def get_one(post: Post) -> Post:
     return post_bd.get_one(post)
 
-def get_all(tipo: str = "") -> list:
+def get_all(tipo: str = "") -> list[Post]:
     return post_bd.get_all(tipo)
 
-def get_from_que(post: Post) -> list:
+def get_from_que(post: Post) -> list[Post]:
     return post_bd.get_form_ques(post)
 
-def get_from_user(post: Post) -> list:
+def get_from_user(post: Post) -> list[Post]:
     return post_bd.get_from_user(post)

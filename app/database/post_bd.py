@@ -1,5 +1,6 @@
 from ..models.Posts import Post
 from .Model import Sentence
+from typing import List
 
 def crear(post: Post) -> Post:
     Sentence(post).save()
@@ -15,7 +16,7 @@ def actualizar(post: Post) -> Post:
     Sentence(post).update(post.get_object()).where(("uuid", post.uuid)).execute()
     return post
 
-def get(limit: int) -> list[Post]:
+def get(limit: int) -> List[Post]:
     sentence = Sentence(Post()).select().limit(limit)
     return [Post(*post) for post in sentence.execute(select_one=False)]
 

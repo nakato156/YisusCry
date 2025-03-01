@@ -1,36 +1,30 @@
-from app.database.Model import BaseModel
+from app.database.bd import BaseModel
+from peewee import UUIDField, CharField, IntegerField, DateTimeField, TextField
 from app.functions.RoleManager import Role
 from hashlib import sha256
-from os import getenv
-import attr
+from playhouse.shortcuts import model_to_dict
 
-def valid(condicion: bool):
-    if not condicion: raise ValueError()
 
-@attr.s()
-class User(BaseModel):
-    uuid: str =     attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(37)])
-    email: str =    attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(100)])
-    username: str = attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(90)])
-    codigo: str =   attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(11)])
-    password: str = attr.field(default="",  validator=attr.validators.instance_of(str), repr=False)
-    id_estado_cuenta: int = attr.field(default=1,  validator=[attr.validators.instance_of(int)])
-    carrera: str =  attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(100)])
-    edad: int =     attr.field(default=0,   validator=[attr.validators.instance_of(int),  lambda _, _attr,val:  valid(val in range(90))])
-    ciclo: int =    attr.field(default=0,   validator=[attr.validators.instance_of(int),  lambda _, _attr,val: valid(val in range(11))])
-    info:str   =    attr.field(default="",  validator=[attr.validators.instance_of(str), attr.validators.max_len(200)], converter=lambda x: str(x) if x else "")
-    fecha: str =    attr.field(default="")
-    role:str =      attr.field(default='pw==*zaNDWhNkWE6nfKNFzUrOxg==*Lad3Ppi6a3VCpH/6GCyudg==*O3fmPCh+W3WHTJfVqM9Iww==')
-    hash_foto:str = attr.field(default="")
+class YisusUsers(BaseModel):
+    uuid: str =     UUIDField(primary_key=True, null=False)
+    email: str =    CharField(max_length=100)
+    username: str = CharField(max_length=90)
+    codigo: str =   CharField(max_length=11)
+    password: str = CharField()
+    id_estado_cuenta: int = IntegerField(default=1)
+    carrera: str =  CharField(max_length=100)
+    edad: int =     IntegerField(null=False)
+    ciclo: int =    IntegerField(default=1, null=False)
+    info:str   =    CharField(max_length=200)
+    fecha_creacion: str =    DateTimeField()
+    role:str =      TextField(default='pw==*zaNDWhNkWE6nfKNFzUrOxg==*Lad3Ppi6a3VCpH/6GCyudg==*O3fmPCh+W3WHTJfVqM9Iww==')
+    hash_foto:str = TextField(default="")
 
-    def __attrs_post_init__(self):
-        setattr(self, "__table", getenv("BD_TABLE_USERS"))
-        self.__table = getenv("BD_TABLE_USERS")
-        self.fields = attr.asdict(self).keys()
-        super().__init__()
-
-    def get_object(self, ignore:tuple = (), convert: bool = False) -> dict:
+    def get_object(self, exclude:tuple = (), convert: bool = False) -> dict:
         if convert: self.role = Role(self.role)
         if self.password: self.password = sha256(self.password.encode()).hexdigest()
-        if ignore: return {k:v for k,v in attr.asdict(self).items() if not k in ignore}
-        return attr.asdict(self)
+        if exclude: return {k:v for k,v in model_to_dict(self, exclude=exclude)}
+        return model_to_dict(self)
+
+    class Meta:
+        table_name = 'YisusUsers'

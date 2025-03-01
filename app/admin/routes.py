@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.models.Users import User
+from app.models import User
 from app.functions.decorators import login_required
 from app.controllers import users_controller
 from app.functions.RoleManager import Role
@@ -16,7 +16,7 @@ def info_user():
     user_query = User(**{criterio: data.get("query")})
     try:
         res = users_controller.get(user_query)
-        res = res.get_object(("password", "info", "fecha"))
+        res = res.get_object(exclude=("password", "info", "fecha"))
         res["role"] = Role(res["role"]).roles
         res["masRoles"] = list(set(Role.ROLES.values()) - set(res["role"].values()) )
     except UserNotFound: res = {}

@@ -5,7 +5,7 @@ from app.functions.RoleManager import Role
 from app.models.Contratos import Contrato
 from app.models.Comments import Comment
 from app.models.Posts import Post
-from app.models.Users import User
+from app.models import User
 from uuid import uuid4
 from os import getenv
 import mercadopago
@@ -36,8 +36,9 @@ def preguntar():
 
 @user_routes.get("/my-posts")
 def get_posts():
-    user_posts = Post(autor_id=session["user"].get("uuid"), tipo=request.args.get("tipo", "P"))
-    data_posts = post_controller.get_from_user(user_posts)
+    user_uuid = str(session["user"].get("uuid"))
+    user_posts = Post(autor_id=user_uuid, tipo=request.args.get("tipo", "p"))
+    data_posts = post_controller.get_from_user(User(uuid=user_uuid), user_posts)
     return {"data": [data.get_object() for data in data_posts]}
 
 @user_routes.post("/crear-pregunta")

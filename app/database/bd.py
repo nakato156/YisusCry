@@ -1,7 +1,31 @@
 import mysql.connector
+from typing import Any
 from os import getenv
 import re
+from peewee import MySQLDatabase, Model
+from playhouse.shortcuts import model_to_dict
 
+# Configuración de la base de datos
+config = {
+    "host": getenv("BD_HOST"),
+    "database": getenv("BD_NAME"),
+    "user": getenv("BD_USER"),
+    "password": getenv("BD_PASS"),
+}
+mysql_db = MySQLDatabase(**config)
+
+# Clase base del modelo
+class BaseModel(Model):
+    class Meta:
+        database = mysql_db
+    
+    def get_object(self, recurse=True, backrefs=False, only=None,
+                exclude=None, seen=None, extra_attrs=None,
+                fields_from_query=None, max_depth=None, manytomany=False)-> dict:
+        return model_to_dict(self, recurse=recurse, backrefs=backrefs, only=only,
+                    exclude=exclude, seen=seen, extra_attrs=extra_attrs,
+                    fields_from_query=fields_from_query, max_depth=max_depth, manytomany=manytomany)
+    
 class BD:
     def __init__(self, **kwargs):
         config = {

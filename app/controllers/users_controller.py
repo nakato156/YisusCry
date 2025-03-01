@@ -1,4 +1,4 @@
-from ..models.Users import User
+from ..models import User
 from hashlib import sha256
 from ..database import user_bd
 

@@ -1,17 +1,18 @@
-from app.database.Model import BaseModel
+from app.database.bd import BaseModel
+from peewee import UUIDField, ForeignKeyField, DoubleField, DateField
+from datetime import datetime
+from .Users import YisusUsers as User
 from os import getenv
-from attr import s as attrS, field
 
-@attrS()
-class Contrato():
-    uuid: str       =   field(default="")
-    user_id: str    =   field(default="")
-    client_id: str  =   field(default="")
-    monto: float    =   field(default=.0)
-    id: int         =   field(default=0)
-    fecha: str      =   field(default="")
+table_name_ = getenv("BD_TABLE_CUENTAS_USERS")
 
-    def __attrs_post_init__(self):
-        setattr(self, "__table", getenv("BD_TABLE_CUENTAS_USERS"))
-        self.__table = getenv("BD_TABLE_CUENTAS_USERS")
-        super().__init__()
+class Contrato(BaseModel):
+    uuid: str       =   UUIDField(null=False)
+    user_id: str    =   ForeignKeyField(User, backref=table_name_)
+    client_id: str  =   ForeignKeyField(User, backref=table_name_)
+    monto: float    =   DoubleField(null=False)
+    fecha: datetime =   DateField()
+
+
+    class Meta:
+        table_name = table_name_

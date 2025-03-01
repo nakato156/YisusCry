@@ -1,26 +1,16 @@
-from app.database.Model import BaseModel, Sentence
-from attr import s as attrS, field
-from os import getenv
+from app.database.bd import BaseModel
+from peewee import UUIDField, ForeignKeyField, IntegerField, DateTimeField
+from app.models import User
+from app.models.Posts import Post
+from datetime import datetime
 
-@attrS
 class Voto(BaseModel):
-    id: int
-    post_id: str    = field()
-    autor_id: str   = field()
-    fecha: str      = field(default="")
+    uuid: str         = UUIDField(primary_key=True, null=False)
+    post_id: str    = ForeignKeyField(Post, backref='Votos')
+    autor_id: str   = ForeignKeyField(User, backref='Votos')
+    votos_up: int   = IntegerField(default=0)
+    votos_dn: int   = IntegerField(default=0)
+    fecha: datetime      = DateTimeField()
 
-    def __attrs_post_init__(self):
-        setattr(self, "__table", getenv("BD_TABLE_VOTOS"))
-        super().__init__()
-
-    def get(self, campos:tuple = ()) -> int:
-        sentence = Sentence(self).select()
-        if campos:
-            for campo in campos:
-                sentence = sentence.where((campo, getattr(self, campo)))
-        else:
-            sentence = sentence.where(("post_id", self.post_id)) \
-                .where(("autor_id", self.autor_id))
-        res = self.execute(sentence.count())
-        print(res)
-        return res
+    class Meta:
+        table_name = 'Votos'

@@ -6,6 +6,3 @@ def save(comentario: Comment) -> Comment:
 
 def eliminar(comentario: Comment) -> bool:
     return comment_db.eliminar(comentario)
-
-def get_comments(comentario: Comment) -> list:
-    return comment_db.get_comments(comentario)
